@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class TeacherRequestDTO {
+public class TeacherRequestDto {
 
 
     @NotBlank(message = "First name is required")

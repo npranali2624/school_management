@@ -19,31 +19,46 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private CustomUserDetailsService service;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain)
             throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
+        try {
+            String header = request.getHeader("Authorization");
 
-        if (header != null && header.startsWith("Bearer ")) {
+            // ✅ ONLY if token exists
+            if (header != null && header.startsWith("Bearer ")) {
 
-            String token = header.substring(7);
-            String email = jwtUtil.extractEmail(token);
+                String token = header.substring(7);
+                String email = jwtUtil.extractEmail(token);
 
-            var userDetails = service.loadUserByUsername(email);
+                // ✅ Check again
+                if (email != null &&
+                        SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
+                    var userDetails = service.loadUserByUsername(email);
 
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities() // roles
+                            );
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+            }
+
+        } catch (Exception e) {
+            // ✅ VERY IMPORTANT → never break request
+            System.out.println("JWT Error: " + e.getMessage());
         }
 
+        // ✅ ALWAYS continue
         chain.doFilter(request, response);
     }
 }

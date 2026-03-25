@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class TeacherResponseDTO {
+public class TeacherResponseDto {
 
 
     private Long id;
