@@ -24,8 +24,8 @@ public class SecurityConfig
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/teachers/**").permitAll()
-                        .requestMatchers("/teacher/**").hasAuthority("TEACHER")
-                        .requestMatchers("/finance/**").hasAuthority("FINANCE")
+                        .requestMatchers("/teacher/**").hasRole("TEACHER")
+                        .requestMatchers("/finance/**").hasRole("FINANCE")
                         .anyRequest().authenticated()
                 )
 

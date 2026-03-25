@@ -4,6 +4,7 @@ package com.example.school_management.controller;
 import com.example.school_management.dto.LoginRequest;
 import com.example.school_management.security.CustomUserDetailsService;
 import com.example.school_management.security.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class AuthController {
     @Autowired
     private PasswordEncoder encoder;
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public String login( @Valid  @RequestBody LoginRequest request) {
         UserDetails user = service.loadUserByUsername(request.getEmail());
 
         if (!encoder.matches(request.getPassword(), user.getPassword())) {

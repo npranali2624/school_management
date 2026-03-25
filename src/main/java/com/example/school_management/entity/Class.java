@@ -3,6 +3,7 @@ package com.example.school_management.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 @Entity
@@ -17,9 +18,9 @@ public class Class {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(name = "class_name", nullable = false)
-    private String className;
+    @Positive
+    @Column(name = "std", nullable = false)
+    private int std;
 
     @NotBlank
     @Column(name = "division", nullable = false)

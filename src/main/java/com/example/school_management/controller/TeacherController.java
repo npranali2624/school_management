@@ -29,4 +29,9 @@ public class TeacherController {
                     .body("Something went wrong while saving: " + e.getMostSpecificCause().getMessage());
         }
     }
+
+    @GetMapping("/dashboard")
+    public String teacherDashboard() {
+        return "Teacher Dashboard";
+    }
 }

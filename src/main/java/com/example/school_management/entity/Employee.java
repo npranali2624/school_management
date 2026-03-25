@@ -1,5 +1,6 @@
 package com.example.school_management.entity;
 
+import com.example.school_management.enums.DegreeType;
 import com.example.school_management.enums.Gender;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -21,8 +22,17 @@ public abstract class Employee extends BaseEntity {
 
     @NotBlank
     @Size(max = 50)
-    @Column(name = "full_name", length = 50, nullable = false)
-    private String fullName;
+    @Column(name = "first_name", length = 50, nullable = false)
+    private String firstName;
+
+    @Size(max = 50)
+    @Column(name = "middle_name", length = 50)
+    private String middleName;
+
+    @NotBlank
+    @Size(max = 50)
+    @Column(name = "last_name", length = 50, nullable = false)
+    private String lastName;
 
     @Email
     @NotBlank
@@ -62,10 +72,13 @@ public abstract class Employee extends BaseEntity {
     @Column(name = "pincode", length = 6, nullable = false)
     private String pincode;
 
-    @NotBlank
-    @Size(max = 100)
-    @Column(name = "degree_name", length = 100, nullable = false)
-    private String degreeName;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "degree_type", length = 50, nullable = false)
+    private DegreeType degreeType;
+
+    // only filled when degreeType = OTHER
+    @Column(name = "custom_degree_name", length = 150)
+    private String customDegreeName;
 
     @NotNull
     @Column(name = "joining_date", nullable = false)
