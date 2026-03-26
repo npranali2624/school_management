@@ -75,12 +75,22 @@ public class Payment extends BaseEntity {
 
 
 
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "collected_by_id", nullable = true)
+    @JoinColumn(name = "collected_by_id", nullable = true)  // ✅ temporarily nullable
     private Finance collectedBy;
 
 
+    // ✅ Add these two fields in Payment entity
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fees_id", nullable = true)
+    private Fees fees;
+
+    @ManyToOne(fetch = FetchType.EAGER)  // EAGER so PDF can access student details
+    @JoinColumn(name = "student_id", nullable = true)
+    private Student student;
 
     @Size(max = 500)
     @Column(name = "remarks", length = 500)

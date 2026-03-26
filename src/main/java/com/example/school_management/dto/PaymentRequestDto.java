@@ -22,4 +22,6 @@ public class PaymentRequestDto {
 
     private Long collectedById;
     private String remarks;
+
+    private Long studentId;
 }
