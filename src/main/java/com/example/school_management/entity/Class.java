@@ -22,9 +22,9 @@ public class Class {
     private Long id;
 
     @NotNull(message = "Standard is required")
-    @Enumerated(EnumType.ORDINAL)  // stores 1,2,3... in DB
-    @Column(name = "std", nullable = false)
-    private Standard std;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "standard", nullable = false)
+    private Standard standard;
 
     @NotNull(message = "Division is required")
     @Enumerated(EnumType.STRING)
