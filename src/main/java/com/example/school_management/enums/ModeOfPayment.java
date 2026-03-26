@@ -1,6 +1,6 @@
 package com.example.school_management.enums;
 
-public enum PaymentMode
+public enum ModeOfPayment
 {
     CASH,
     UPI,
@@ -9,12 +9,12 @@ public enum PaymentMode
     DEMAND_DRAFT,
     CARD;
 
-    public static PaymentMode fromString(String mode) {
+    public static ModeOfPayment fromString(String mode) {
         if (mode == null) throw new IllegalArgumentException("Payment mode cannot be null");
 
         switch (mode.toUpperCase()) {
             case "CHECK": return CHEQUE;  // map incorrect input to correct enum
-            default: return PaymentMode.valueOf(mode.toUpperCase());
+            default: return ModeOfPayment.valueOf(mode.toUpperCase());
         }
     }
 }

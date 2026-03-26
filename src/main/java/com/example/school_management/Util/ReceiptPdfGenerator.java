@@ -116,11 +116,11 @@ public class ReceiptPdfGenerator {
         // ── Payment Details ──────────────────────────────────
         document.add(new Paragraph("PAYMENT DETAILS", sectionFont));
         document.add(Chunk.NEWLINE);
-        document.add(new Paragraph("Payment Mode    : " + payment.getPaymentMode().name(), valueFont));
+        document.add(new Paragraph("Payment Mode    : " + payment.getModeofpayment().name(), valueFont));
         document.add(new Paragraph("Status          : " + payment.getStatus().name(), valueFont));
 
         // ✅ Dynamic based on payment mode
-        switch (payment.getPaymentMode()) {
+        switch (payment.getModeofpayment()) {
             case UPI:
                 document.add(new Paragraph("UPI ID          : " + payment.getUpiId(), valueFont));
                 document.add(new Paragraph("Transaction ID  : " + payment.getTransactionId(), valueFont));

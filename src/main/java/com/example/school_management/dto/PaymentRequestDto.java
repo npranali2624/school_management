@@ -9,7 +9,7 @@ public class PaymentRequestDto {
 
     private BigDecimal totalAmount;
     private LocalDate paymentDate;
-    private String paymentMode;
+    private String Modeofpayment;
 
     private String transactionId;
     private String upiId;

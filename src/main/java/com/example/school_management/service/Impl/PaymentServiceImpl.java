@@ -5,8 +5,8 @@ import com.example.school_management.dto.PaymentRequestDto;
 import com.example.school_management.dto.PaymentResponseDto;
 import com.example.school_management.entity.Payment;
 import com.example.school_management.entity.Student;
-import com.example.school_management.enums.PaymentMode;
 import com.example.school_management.enums.PaymentStatus;
+import com.example.school_management.enums.ModeOfPayment;
 import com.example.school_management.repo.PaymentRepository;
 import com.example.school_management.repo.StudentRepository;
 import com.example.school_management.service.PaymentService;
@@ -31,7 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
         // Required fields
         payment.setTotalAmount(request.getTotalAmount());
         payment.setPaymentDate(LocalDate.now());
-        payment.setPaymentMode(PaymentMode.fromString(request.getPaymentMode()));
+        payment.setModeofpayment(ModeOfPayment.fromString(request.getModeofpayment()));
         payment.setRemarks(request.getRemarks());
         payment.setStatus(PaymentStatus.COMPLETED);
 
@@ -50,8 +50,8 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         // Auto-generate receipt and reference number
-        String receipt = ReceiptGenerator.generateReceipt(payment.getPaymentMode());
-        String referenceNumber = ReceiptGenerator.generateReferenceNumber(payment.getPaymentMode());
+        String receipt = ReceiptGenerator.generateReceipt(payment.getModeofpayment());
+        String referenceNumber = ReceiptGenerator.generateReferenceNumber(payment.getModeofpayment());
         payment.setReceiptNumber(receipt);
         payment.setReferenceNumber(referenceNumber);
 
@@ -65,7 +65,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .paymentDate(payment.getPaymentDate())
                 .status(payment.getStatus().name())
                 .totalAmount(payment.getTotalAmount())
-                .paymentMode(payment.getPaymentMode().name())
+                .Modeofpayment(payment.getModeofpayment().name())
                 .message("Payment Successful")
                 .build();
     }

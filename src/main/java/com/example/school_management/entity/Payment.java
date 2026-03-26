@@ -1,7 +1,7 @@
 package com.example.school_management.entity;
 
-import com.example.school_management.enums.PaymentMode;
 import com.example.school_management.enums.PaymentStatus;
+import com.example.school_management.enums.ModeOfPayment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -39,8 +39,8 @@ public class Payment extends BaseEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_mode", nullable = false)
-    private PaymentMode paymentMode;
+    @Column(name = "mode_of_payment", nullable = false)
+    private ModeOfPayment Modeofpayment;
 
     // UPI
     @Size(max = 100)
