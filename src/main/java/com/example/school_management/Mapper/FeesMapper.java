@@ -9,8 +9,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Component
-public class FeesMapper {
-    public Fees toEntity(FeesRequestDto dto) {
+public class FeesMapper
+{
+    public Fees toEntity(FeesRequestDto dto)
+    {
         List<FeeItem> feeItems = dto.getFeeItems().stream()
                 .map(item -> FeeItem.builder()
                         .feeType(item.getFeeType())
@@ -32,6 +34,7 @@ public class FeesMapper {
     }
 
     public FeesResponseDto toResponseDTO(Fees fees) {
+
         List<FeesResponseDto.FeeItemDTO> feeItemDTOs = fees.getFeeItems().stream()
                 .map(item -> FeesResponseDto.FeeItemDTO.builder()
                         .feeType(item.getFeeType().getDisplayName())
@@ -42,7 +45,7 @@ public class FeesMapper {
 
         return FeesResponseDto.builder()
                 .id(fees.getId())
-                .std(fees.getStd())
+                .std(fees.getStd().getValue())
                 .feeItems(feeItemDTOs)
                 .paymentCycle(fees.getPaymentCycle())
                 .academicYear(fees.getAcademicYear())

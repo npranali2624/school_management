@@ -26,6 +26,10 @@ public class StudentRequestDto {
     @NotNull(message = "Blood group is required")
     private BloodGroup bloodGroup;
 
+    @NotNull(message = "Roll number is required")
+    @Min(value = 1, message = "Roll number must be at least 1")
+    private Integer rollNumber;
+
     @NotBlank
     @Pattern(regexp = "^[0-9]{12}$", message = "Aadhar must be 12 digits")
     private String aadharNo;
@@ -83,11 +87,11 @@ public class StudentRequestDto {
     private Double previousPercentage;
 
     // Documents
-    @NotBlank private String birthCertificate_url;
-    @NotBlank private String aadharPhoto_url;
-    private String previousMarksheet_url;
-    @NotBlank private String passportPhoto_url;
-    private String leavingCertificate_url;
-    private String casteCertificate_url;
-    private String incomeCertificate_url;
+    @NotBlank private String birthCertificateUrl;
+    @NotBlank private String aadharPhotoUrl;
+    private String previousMarksheetUrl;
+    @NotBlank private String passportPhotoUrl;
+    private String leavingCertificateUrl;
+    private String casteCertificateUrl;
+    private String incomeCertificateUrl;
 }

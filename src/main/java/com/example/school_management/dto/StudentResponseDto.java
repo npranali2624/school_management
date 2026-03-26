@@ -9,7 +9,7 @@ public class StudentResponseDto {
 
     private Long id;
     private String fullName;        // computed from getFullName()
-    private String rollNumber;
+    private Integer rollNumber;
     private String aadharNo;
     private Gender gender;
     private LocalDate dob;

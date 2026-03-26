@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
     // Find student by roll number
-    Optional<Student> findByRollNumber(String rollNumber);
+    Optional<Student> findByRollNumber(Integer rollNumber);
 
     // Find student by aadhar number
     Optional<Student> findByAadharNo(String aadharNo);
@@ -20,7 +20,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByAadharNo(String aadharNo);
 
     // Check if roll number already exists
-    boolean existsByRollNumber(String rollNumber);
+    boolean existsByRollNumber(Integer rollNumber);
 
     // Get all active students
     List<Student> findAllByIsActiveTrue();

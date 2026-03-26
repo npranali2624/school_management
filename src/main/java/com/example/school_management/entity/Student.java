@@ -6,6 +6,7 @@ import com.example.school_management.enums.Gender;
 import com.example.school_management.enums.Religion;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -74,9 +75,10 @@ public class Student extends BaseEntity {
     @Column(name = "category", length = 30, nullable = false)
     private Category category;
 
-    @Size(max = 20, message = "Roll number must not exceed 20 characters")
-    @Column(name = "roll_number", length = 20, unique = true)
-    private String rollNumber;
+    @NotNull(message = "Roll number is required")
+    @Min(value = 1, message = "Roll number must be at least 1")
+    @Column(name = "roll_number", unique = true)
+    private Integer rollNumber;
 
 
 
@@ -180,41 +182,42 @@ public class Student extends BaseEntity {
     @NotBlank(message = "Birth certificate is required")
     @Size(max = 200)
     @Column(name = "birth_certificate_url", length = 200, nullable = false)
-    private String birthCertificate_url;
+    private String birthCertificateUrl;
 
     @NotBlank(message = "Aadhar photo is required")
     @Size(max = 200)
     @Column(name = "aadhar_photo_url", length = 200, nullable = false)
-    private String aadharPhoto_url;
+    private String aadharPhotoUrl;
 
 
     @Size(max = 200)
     @Column(name = "previous_marksheet_url", length = 200)
-    private String previousMarksheet_url;
+    private String previousMarksheetUrl;
 
     @NotBlank(message = "Passport-size photo is required")
     @Size(max = 200)
     @Column(name = "passport_photo_url", length = 200, nullable = false)
-    private String passportPhoto_url;
+    private String passportPhotoUrl;
 
 
     @Size(max = 200)
     @Column(name = "lc_url", length = 200)
-    private String leavingCertificate_url;
+    private String leavingCertificateUrl;
 
 
     @Size(max = 200)
     @Column(name = "caste_certificate_url", length = 200)
-    private String casteCertificate_url;
+    private String casteCertificateUrl;
 
     @Size(max = 200)
     @Column(name = "income_certificate_url", length = 200)
-    private String incomeCertificate_url;
+    private String incomeCertificateUrl;
 
 
     //  SECTION 5 — System Fields
 
 
+    @Builder.Default
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 }

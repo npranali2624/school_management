@@ -4,6 +4,7 @@ import com.example.school_management.dto.FeesRequestDto;
 import com.example.school_management.dto.FeesResponseDto;
 import com.example.school_management.entity.Fees;
 import com.example.school_management.Mapper.FeesMapper;
+import com.example.school_management.enums.Standard;
 import com.example.school_management.repo.FeesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,13 @@ public class FeeService
                 .map(feesMapper::toResponseDTO)
                 .toList();
     }
-    public List<FeesResponseDto> getFeesByStd(String std) {
+    public List<FeesResponseDto> getFeesByStd(Standard std) {
         return feesRepository.findByStd(std)
                 .stream()
                 .map(feesMapper::toResponseDTO)
                 .toList();
     }
-    public List<FeesResponseDto> getFeesByStdAndYear(String std, String academicYear) {
+    public List<FeesResponseDto> getFeesByStdAndYear(Standard std, String academicYear) {
         return feesRepository.findByStdAndAcademicYear(std, academicYear)
                 .stream()
                 .map(feesMapper::toResponseDTO)

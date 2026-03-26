@@ -70,14 +70,14 @@ public class Payment extends BaseEntity {
 
 
     @Size(max = 50)
-    @Column(name = "receipt_number", length = 50, unique = true)
+    @Column(name = "receipt_number", length = 50, unique = true, updatable = false)
     private String receiptNumber;
 
 
 
-    // @NotNull
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "collected_by_id", nullable = false)
+    @JoinColumn(name = "collected_by_id", nullable = true)
     private Finance collectedBy;
 
 

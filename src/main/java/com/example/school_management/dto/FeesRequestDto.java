@@ -2,6 +2,7 @@ package com.example.school_management.dto;
 
 import com.example.school_management.enums.FineType;
 import com.example.school_management.enums.PaymentCycle;
+import com.example.school_management.enums.Standard;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -11,19 +12,28 @@ import java.util.List;
 @Data
 public class FeesRequestDto
 {
-    @NotBlank(message = "Standard (class) is required")
-    private String std;
+    @NotNull(message = "Standard is required")
+    private Standard std;
+
     @NotEmpty(message = "At least one fee item is required")
     @Valid
     private List<FeeItemDTO> feeItems;
+
     @NotNull(message = "Payment cycle is required")
     private PaymentCycle paymentCycle;
+
     @NotBlank(message = "Academic year is required")
-    @Pattern(regexp = "^\\d{4}-\\d{4}$", message = "Academic year must be in format YYYY-YYYY e.g. 2024-2025")
+    @Pattern(
+            regexp = "^(20\\d{2})-(20\\d{2})$",
+            message = "Academic year must be in format YYYY-YYYY (e.g., 2024-2025)"
+    )
     private String academicYear;
+
     private FineType fineType;
+
     @DecimalMin(value = "0.0", message = "Fine amount cannot be negative")
     private BigDecimal fineAmount;
+
     @Data
     public static class FeeItemDTO {
 

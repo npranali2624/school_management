@@ -48,7 +48,7 @@ public class StudentController {
     // Get student by roll number
     @GetMapping("/roll/{rollNumber}")
     public ResponseEntity<StudentResponseDto> getStudentByRollNumber(
-            @PathVariable String rollNumber) {
+            @PathVariable Integer rollNumber) {
 
         return ResponseEntity.ok(studentService.getStudentByRollNumber(rollNumber));
     }

@@ -2,6 +2,7 @@ package com.example.school_management.dto;
 
 import com.example.school_management.enums.FineType;
 import com.example.school_management.enums.PaymentCycle;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -10,10 +11,11 @@ import java.util.List;
 
 @Data
 @Builder
-public class FeesResponseDto
-{
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class FeesResponseDto {
+
     private Long id;
-    private String std;
+    private Integer std;
     private List<FeeItemDTO> feeItems;
     private PaymentCycle paymentCycle;
     private String academicYear;
@@ -27,8 +29,7 @@ public class FeesResponseDto
 
     @Data
     @Builder
-    public static class FeeItemDTO
-    {
+    public static class FeeItemDTO {
         private String feeType;
         private String feeTypeCode;
         private BigDecimal amount;

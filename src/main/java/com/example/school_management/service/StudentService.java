@@ -13,7 +13,7 @@ public interface StudentService {
 
     StudentResponseDto getStudentById(Long id);
 
-    StudentResponseDto getStudentByRollNumber(String rollNumber);
+    StudentResponseDto getStudentByRollNumber(Integer rollNumber);
 
     StudentResponseDto updateStudent(Long id, StudentRequestDto request);
 
