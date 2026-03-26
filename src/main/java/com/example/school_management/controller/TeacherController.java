@@ -1,12 +1,11 @@
 package com.example.school_management.controller;
 
 import com.example.school_management.entity.Teacher;
-import com.example.school_management.repo.TeacherRepo;
+import com.example.school_management.service.TeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,14 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TeacherController {
 
-    private final TeacherRepo teacherRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final TeacherService teacherService;
 
     @PostMapping
     public ResponseEntity<?> createTeacher(@Valid @RequestBody Teacher teacher) {
         try {
-            teacher.setPassword(passwordEncoder.encode(teacher.getPassword()));
-            Teacher savedTeacher = teacherRepository.save(teacher);
+            Teacher savedTeacher = teacherService.createTeacher(teacher);
             return ResponseEntity.ok(savedTeacher);
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity
