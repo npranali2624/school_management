@@ -1,8 +1,6 @@
-package com.example.school_management.service;
+package com.example.school_management.service.Impl;
 
 import com.example.school_management.dto.PaymentRequestDto;
-import com.example.school_management.dto.PaymentRequestDto;
-import com.example.school_management.dto.PaymentResponseDto;
 import com.example.school_management.dto.PaymentResponseDto;
 import com.example.school_management.entity.Payment;
 import com.example.school_management.enums.PaymentMode;
