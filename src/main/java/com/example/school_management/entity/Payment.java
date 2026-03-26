@@ -53,11 +53,11 @@ public class Payment extends BaseEntity {
 
     // CHECK / DEMAND_DRAFT
     @Size(max = 50)
-    @Column(name = "check_number", length = 50)
-    private String checkNumber;
+    @Column(name = "cheque_number", length = 50)
+    private String chequeNumber;
 
-    @Column(name = "check_date")
-    private LocalDate checkDate;
+    @Column(name = "cheque_date")
+    private LocalDate chequeDate;
 
     // NET_BANKING / CARD
     @Size(max = 100)
@@ -75,7 +75,7 @@ public class Payment extends BaseEntity {
 
 
 
-    @NotNull
+    // @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "collected_by_id", nullable = false)
     private Finance collectedBy;
