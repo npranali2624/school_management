@@ -70,6 +70,8 @@ public class StudentRequestDto {
     @Email
     private String email;
 
+    private String password;
+
     // Address
     @NotBlank private String addressLine1;
     private String addressLine2;

@@ -15,7 +15,7 @@ import java.util.List;
 public class FeesResponseDto {
 
     private Long id;
-    private Integer std;
+    private String std;        // ✅ changed Integer → String
     private List<FeeItemDTO> feeItems;
     private PaymentCycle paymentCycle;
     private String academicYear;

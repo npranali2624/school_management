@@ -2,11 +2,13 @@ package com.example.school_management.service.Impl;
 
 import com.example.school_management.dto.StudentRequestDto;
 import com.example.school_management.dto.StudentResponseDto;
+import com.example.school_management.entity.Parent;
 import com.example.school_management.entity.Student;
 import com.example.school_management.exception.ResourceNotFoundException;
 import com.example.school_management.exception.DuplicateResourceException;
 import com.example.school_management.repo.StudentRepository;
 import com.example.school_management.service.StudentService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public StudentResponseDto admitStudent(StudentRequestDto request) {
@@ -96,10 +99,53 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteById(id);
     }
 
-    // ✅ MAPPER METHODS
+    // ─── MAPPER METHODS ─────────────────────────────────────────────
+
+    private Parent buildParent(StudentRequestDto dto) {
+
+        Parent parent = new Parent();
+
+        // FIX: Map and encode the password during creation
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            parent.setPassword(passwordEncoder.encode(dto.getPassword()));
+        } else {
+            // This prevents the Jakarta Validation error by catching it before saving
+            throw new IllegalArgumentException("Password is required for Parent account");
+        }
+
+        // Father
+        parent.setFatherFirstName(dto.getFatherFirstName());
+        parent.setFatherMiddleName(dto.getFatherMiddleName());
+        parent.setFatherLastName(dto.getFatherLastName());
+        parent.setFatherOccupation(dto.getFatherOccupation());
+
+        // Mother
+        parent.setMotherFirstName(dto.getMotherFirstName());
+        parent.setMotherMiddleName(dto.getMotherMiddleName());
+        parent.setMotherLastName(dto.getMotherLastName());
+        parent.setMotherOccupation(dto.getMotherOccupation());
+
+        // Guardian
+        parent.setGuardianFirstName(dto.getGuardianFirstName());
+        parent.setGuardianMiddleName(dto.getGuardianMiddleName());
+        parent.setGuardianLastName(dto.getGuardianLastName());
+        parent.setGuardianRelation(dto.getGuardianRelation());
+
+        // Contact
+        parent.setMobilePrimary(dto.getMobilePrimary());
+        parent.setMobileAlternate(dto.getMobileAlternate());
+        parent.setEmail(dto.getEmail());
+        parent.setAddressLine1(dto.getAddressLine1());
+
+        return parent;
+    }
 
     private Student mapToEntity(StudentRequestDto dto) {
+
+        Parent parent = buildParent(dto);
+
         return Student.builder()
+                // Section 1
                 .firstName(dto.getFirstName())
                 .middleName(dto.getMiddleName())
                 .lastName(dto.getLastName())
@@ -110,33 +156,16 @@ public class StudentServiceImpl implements StudentService {
                 .nationality(dto.getNationality())
                 .religion(dto.getReligion())
                 .category(dto.getCategory())
-                .rollNumber(dto.getRollNumber())   // ✅ IMPORTANT
+                .rollNumber(dto.getRollNumber())
 
-                .fatherFirstName(dto.getFatherFirstName())
-                .fatherMiddleName(dto.getFatherMiddleName())
-                .fatherLastName(dto.getFatherLastName())
-                .fatherOccupation(dto.getFatherOccupation())
+                // Section 2
+                .parent(parent)
 
-                .motherFirstName(dto.getMotherFirstName())
-                .motherMiddleName(dto.getMotherMiddleName())
-                .motherLastName(dto.getMotherLastName())
-                .motherOccupation(dto.getMotherOccupation())
-
-                .guardianFirstName(dto.getGuardianFirstName())
-                .guardianMiddleName(dto.getGuardianMiddleName())
-                .guardianLastName(dto.getGuardianLastName())
-                .guardianRelation(dto.getGuardianRelation())
-
-                .mobilePrimary(dto.getMobilePrimary())
-                .mobileAlternate(dto.getMobileAlternate())
-                .email(dto.getEmail())
-
-                .addressLine1(dto.getAddressLine1())
-
+                // Section 3
                 .previousSchool(dto.getPreviousSchool())
                 .previousPercentage(dto.getPreviousPercentage())
 
-                // ✅ CORRECT METHOD NAMES
+                // Section 4
                 .birthCertificateUrl(dto.getBirthCertificateUrl())
                 .aadharPhotoUrl(dto.getAadharPhotoUrl())
                 .previousMarksheetUrl(dto.getPreviousMarksheetUrl())
@@ -150,6 +179,7 @@ public class StudentServiceImpl implements StudentService {
 
     private void updateEntityFromDto(Student student, StudentRequestDto dto) {
 
+        // Section 1
         student.setFirstName(dto.getFirstName());
         student.setMiddleName(dto.getMiddleName());
         student.setLastName(dto.getLastName());
@@ -161,31 +191,41 @@ public class StudentServiceImpl implements StudentService {
         student.setCategory(dto.getCategory());
         student.setRollNumber(dto.getRollNumber());
 
-        student.setFatherFirstName(dto.getFatherFirstName());
-        student.setFatherMiddleName(dto.getFatherMiddleName());
-        student.setFatherLastName(dto.getFatherLastName());
-        student.setFatherOccupation(dto.getFatherOccupation());
+        // Section 2
+        Parent parent = student.getParent() != null ? student.getParent() : new Parent();
 
-        student.setMotherFirstName(dto.getMotherFirstName());
-        student.setMotherMiddleName(dto.getMotherMiddleName());
-        student.setMotherLastName(dto.getMotherLastName());
-        student.setMotherOccupation(dto.getMotherOccupation());
+        parent.setFatherFirstName(dto.getFatherFirstName());
+        parent.setFatherMiddleName(dto.getFatherMiddleName());
+        parent.setFatherLastName(dto.getFatherLastName());
+        parent.setFatherOccupation(dto.getFatherOccupation());
 
-        student.setGuardianFirstName(dto.getGuardianFirstName());
-        student.setGuardianMiddleName(dto.getGuardianMiddleName());
-        student.setGuardianLastName(dto.getGuardianLastName());
-        student.setGuardianRelation(dto.getGuardianRelation());
+        parent.setMotherFirstName(dto.getMotherFirstName());
+        parent.setMotherMiddleName(dto.getMotherMiddleName());
+        parent.setMotherLastName(dto.getMotherLastName());
+        parent.setMotherOccupation(dto.getMotherOccupation());
 
-        student.setMobilePrimary(dto.getMobilePrimary());
-        student.setMobileAlternate(dto.getMobileAlternate());
-        student.setEmail(dto.getEmail());
+        parent.setGuardianFirstName(dto.getGuardianFirstName());
+        parent.setGuardianMiddleName(dto.getGuardianMiddleName());
+        parent.setGuardianLastName(dto.getGuardianLastName());
+        parent.setGuardianRelation(dto.getGuardianRelation());
 
-        student.setAddressLine1(dto.getAddressLine1());
+        parent.setMobilePrimary(dto.getMobilePrimary());
+        parent.setMobileAlternate(dto.getMobileAlternate());
+        parent.setEmail(dto.getEmail());
+        parent.setAddressLine1(dto.getAddressLine1());
 
+        // Update password if provided in update request
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            parent.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        student.setParent(parent);
+
+        // Section 3
         student.setPreviousSchool(dto.getPreviousSchool());
         student.setPreviousPercentage(dto.getPreviousPercentage());
 
-        // ✅ FIXED HERE ALSO
+        // Section 4
         student.setBirthCertificateUrl(dto.getBirthCertificateUrl());
         student.setAadharPhotoUrl(dto.getAadharPhotoUrl());
         student.setPreviousMarksheetUrl(dto.getPreviousMarksheetUrl());
@@ -196,9 +236,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private StudentResponseDto mapToResponseDto(Student student) {
+
         StudentResponseDto dto = new StudentResponseDto();
 
+        // Section 1
         dto.setId(student.getId());
+        dto.setFirstName(student.getFirstName());
+        dto.setMiddleName(student.getMiddleName());
+        dto.setLastName(student.getLastName());
         dto.setRollNumber(student.getRollNumber());
         dto.setAadharNo(student.getAadharNo());
         dto.setGender(student.getGender());
@@ -207,11 +252,37 @@ public class StudentServiceImpl implements StudentService {
         dto.setNationality(student.getNationality());
         dto.setReligion(student.getReligion());
         dto.setCategory(student.getCategory());
-        dto.setMobilePrimary(student.getMobilePrimary());
-        dto.setMobileAlternate(student.getMobileAlternate());
-        dto.setEmail(student.getEmail());
+
+        // Section 2
+        if (student.getParent() != null) {
+            Parent parent = student.getParent();
+
+            dto.setFatherFirstName(parent.getFatherFirstName());
+            dto.setFatherMiddleName(parent.getFatherMiddleName());
+            dto.setFatherLastName(parent.getFatherLastName());
+            dto.setFatherOccupation(parent.getFatherOccupation());
+
+            dto.setMotherFirstName(parent.getMotherFirstName());
+            dto.setMotherMiddleName(parent.getMotherMiddleName());
+            dto.setMotherLastName(parent.getMotherLastName());
+            dto.setMotherOccupation(parent.getMotherOccupation());
+
+            dto.setGuardianFirstName(parent.getGuardianFirstName());
+            dto.setGuardianMiddleName(parent.getGuardianMiddleName());
+            dto.setGuardianLastName(parent.getGuardianLastName());
+            dto.setGuardianRelation(parent.getGuardianRelation());
+
+            dto.setMobilePrimary(parent.getMobilePrimary());
+            dto.setMobileAlternate(parent.getMobileAlternate());
+            dto.setEmail(parent.getEmail());
+            dto.setAddressLine1(parent.getAddressLine1());
+        }
+
+        // Section 3
         dto.setPreviousSchool(student.getPreviousSchool());
         dto.setPreviousPercentage(student.getPreviousPercentage());
+
+        // Section 5
         dto.setActive(student.isActive());
 
         return dto;

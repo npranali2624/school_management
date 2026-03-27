@@ -42,4 +42,7 @@ public class Class {
     @Min(0)
     @Column(name = "girls")
     private Integer girls;
+
+    @Column(name = "class_name", nullable = false)
+    private String className;
 }

@@ -4,35 +4,41 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Standard {
-    STD_1(1),
-    STD_2(2),
-    STD_3(3),
-    STD_4(4),
-    STD_5(5),
-    STD_6(6),
-    STD_7(7),
-    STD_8(8),
-    STD_9(9),
-    STD_10(10),
-    STD_11(11),
-    STD_12(12);
 
-    private final int value;
+    // ── KG Standards ────────────────────────────
+    NURSERY("Nursery"),
+    JUNIOR_KG("Junior KG"),
+    SENIOR_KG("Senior KG"),
 
-    Standard(int value) {
+    // ── Numeric Standards ────────────────────────
+    STD_1("1"),
+    STD_2("2"),
+    STD_3("3"),
+    STD_4("4"),
+    STD_5("5"),
+    STD_6("6"),
+    STD_7("7"),
+    STD_8("8"),
+    STD_9("9"),
+    STD_10("10"),
+    STD_11("11"),
+    STD_12("12");
+
+    private final String value;
+
+    Standard(String value) {
         this.value = value;
     }
 
     @JsonValue
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    // 🔥 THIS IS THE KEY PART
     @JsonCreator
-    public static Standard fromValue(int value) {
+    public static Standard fromValue(String value) {
         for (Standard std : Standard.values()) {
-            if (std.value == value) {
+            if (std.value.equalsIgnoreCase(value)) {
                 return std;
             }
         }

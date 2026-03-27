@@ -29,7 +29,7 @@ public class Subject {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "standard", nullable = false, length = 10)
+    @Column(name = "standard", nullable = true, length = 20)
     private Standard standard;
 
     // How many hours/periods this subject has per week

@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -86,82 +88,10 @@ public class Student extends BaseEntity {
 
 
 
-    @NotBlank(message = "Father's first name is required")
-    @Size(max = 50, message = "Father's first name must not exceed 50 characters")
-    @Column(name = "father_first_name", length = 50, nullable = false)
-    private String fatherFirstName;
-
-    @Size(max = 50, message = "Father's middle name must not exceed 50 characters")
-    @Column(name = "father_middle_name", length = 50)
-    private String fatherMiddleName;
-
-    @NotBlank(message = "Father's last name is required")
-    @Size(max = 50, message = "Father's last name must not exceed 50 characters")
-    @Column(name = "father_last_name", length = 50, nullable = false)
-    private String fatherLastName;
-
-    @Size(max = 100, message = "Father's occupation must not exceed 100 characters")
-    @Column(name = "father_occupation", length = 100)
-    private String fatherOccupation;
-
-     //mother
-
-    @NotBlank(message = "Mother's first name is required")
-    @Size(max = 50, message = "Mother's first name must not exceed 50 characters")
-    @Column(name = "mother_first_name", length = 50, nullable = false)
-    private String motherFirstName;
-
-    @Size(max = 50, message = "Mother's middle name must not exceed 50 characters")
-    @Column(name = "mother_middle_name", length = 50)
-    private String motherMiddleName;
-
-    @NotBlank(message = "Mother's last name is required")
-    @Size(max = 50, message = "Mother's last name must not exceed 50 characters")
-    @Column(name = "mother_last_name", length = 50, nullable = false)
-    private String motherLastName;
-
-    @Size(max = 100, message = "Mother's occupation must not exceed 100 characters")
-    @Column(name = "mother_occupation", length = 100)
-    private String motherOccupation;
-
-// ── Guardian (if different from Father/Mother) ──
-
-    @Size(max = 50, message = "Guardian's first name must not exceed 50 characters")
-    @Column(name = "guardian_first_name", length = 50)
-    private String guardianFirstName;
-
-    @Size(max = 50, message = "Guardian's middle name must not exceed 50 characters")
-    @Column(name = "guardian_middle_name", length = 50)
-    private String guardianMiddleName;
-
-    @Size(max = 50, message = "Guardian's last name must not exceed 50 characters")
-    @Column(name = "guardian_last_name", length = 50)
-    private String guardianLastName;
-
-    @Size(max = 50, message = "Guardian relation must not exceed 50 characters")
-    @Column(name = "guardian_relation", length = 50)
-    private String guardianRelation;
-
-    @NotBlank(message = "Primary mobile number is required")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Primary mobile must be exactly 10 digits")
-    @Column(name = "mobile_primary", length = 10, nullable = false)
-    private String mobilePrimary;
-
-    @Pattern(regexp = "^[0-9]{10}$", message = "Alternate mobile must be exactly 10 digits")
-    @Column(name = "mobile_alternate", length = 10)
-    private String mobileAlternate;
-
-    @Email(message = "Please provide a valid email address")
-    @Size(max = 100, message = "Email must not exceed 100 characters")
-    @Column(name = "email", length = 100, unique = true)
-    private String email;
-
-    @NotBlank(message = "Address line 1 is required")
-    @Size(max = 100, message = "Address line 1 must not exceed 100 characters")
-    @Column(name = "address_line1", length = 100, nullable = false)
-    private String addressLine1;
-
-
+    //  SECTION 2 — Parent / Guardian Information
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parent_id")
+    private Parent parent;
     //  SECTION 3 — Academic Information
 
 
@@ -212,6 +142,7 @@ public class Student extends BaseEntity {
     @Size(max = 200)
     @Column(name = "income_certificate_url", length = 200)
     private String incomeCertificateUrl;
+
 
 
     //  SECTION 5 — System Fields

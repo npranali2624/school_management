@@ -1,5 +1,6 @@
 package com.example.school_management.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,6 +10,8 @@ public class PaymentRequestDto {
 
     private BigDecimal totalAmount;
     private LocalDate paymentDate;
+
+    @JsonProperty("Modeofpayment")
     private String Modeofpayment;
 
     private String transactionId;

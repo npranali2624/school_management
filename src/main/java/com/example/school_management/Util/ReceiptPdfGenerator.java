@@ -79,8 +79,17 @@ public class ReceiptPdfGenerator {
             document.add(Chunk.NEWLINE);
             document.add(new Paragraph("Student Name    : " + fullName, valueFont));
             document.add(new Paragraph("Roll Number     : " + s.getRollNumber(), valueFont));
-            document.add(new Paragraph("Contact         : " + s.getMobilePrimary(), valueFont));
-            document.add(new Paragraph("Address         : " + s.getAddressLine1(), valueFont));
+
+
+            // BEFORE (wrong)
+            if (s.getParent() != null) {
+                document.add(new Paragraph(
+                        "Contact         : " + s.getParent().getMobilePrimary(), valueFont));
+
+                document.add(new Paragraph(
+                        "Address         : " + s.getParent().getAddressLine1(), valueFont));
+            }
+
 
             document.add(Chunk.NEWLINE);
             document.add(new Paragraph(LINE, valueFont));

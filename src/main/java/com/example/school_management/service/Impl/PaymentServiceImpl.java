@@ -9,6 +9,7 @@ import com.example.school_management.enums.PaymentStatus;
 import com.example.school_management.enums.ModeOfPayment;
 import com.example.school_management.repo.PaymentRepository;
 import com.example.school_management.repo.StudentRepository;
+import com.example.school_management.service.EmailService;
 import com.example.school_management.service.PaymentService;
 import com.example.school_management.Util.ReceiptGenerator;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,8 @@ import java.time.LocalDate;
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final StudentRepository studentRepository; // ✅ Added
+    private final StudentRepository studentRepository;
+    private final EmailService emailService;
 
     @Override
     public PaymentResponseDto makePayment(PaymentRequestDto request) {
@@ -42,10 +44,12 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setChequeNumber(request.getChequeNumber());
         payment.setChequeDate(request.getChequeDate());
 
-        // ✅ Fetch student and set — INSIDE makePayment method
+        // Fetch student and set
+        Student student = null;
         if (request.getStudentId() != null) {
-            Student student = studentRepository.findById(request.getStudentId())
-                    .orElseThrow(() -> new RuntimeException("Student not found with id: " + request.getStudentId()));
+            student = studentRepository.findById(request.getStudentId())
+                    .orElseThrow(() -> new RuntimeException(
+                            "Student not found with id: " + request.getStudentId()));
             payment.setStudent(student);
         }
 
@@ -57,6 +61,26 @@ public class PaymentServiceImpl implements PaymentService {
 
         // Save
         paymentRepository.save(payment);
+
+        // ✅ Send email — access email via student.getParent()
+        if (student != null
+                && student.getParent() != null
+                && student.getParent().getEmail() != null) {   // ✅ fixed
+            try {
+                byte[] pdfBytes = ReceiptPdfGenerator.generateReceiptPdf(payment);
+                String studentName = student.getFirstName() + " " + student.getLastName();
+
+                emailService.sendReceiptEmail(
+                        student.getParent().getEmail(),        // ✅ fixed
+                        studentName,
+                        receipt,
+                        pdfBytes
+                );
+            } catch (Exception e) {
+                // Payment won't fail if email fails
+                System.out.println("Email sending failed: " + e.getMessage());
+            }
+        }
 
         // Response
         return PaymentResponseDto.builder()
@@ -73,11 +97,10 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public byte[] downloadReceiptPdf(String receiptNumber) {
 
-        // Find payment by receipt number
         Payment payment = paymentRepository.findByReceiptNumber(receiptNumber)
-                .orElseThrow(() -> new RuntimeException("Payment not found for receipt: " + receiptNumber));
+                .orElseThrow(() -> new RuntimeException(
+                        "Payment not found for receipt: " + receiptNumber));
 
-        // Generate PDF
         try {
             return ReceiptPdfGenerator.generateReceiptPdf(payment);
         } catch (Exception e) {
