@@ -98,26 +98,26 @@ public abstract class Employee extends BaseEntity {
     @NotBlank
     @Size(max = 200)
     @Column(name = "aadhar_photo_url", length = 200, nullable = false)
-    private String aadharPhoto;
+    private String aadharPhotourl;
 
     @NotBlank
     @Size(max = 200)
     @Column(name = "pan_photo_url", length = 200, nullable = false)
-    private String panPhoto;
+    private String panPhotourl;
 
     @NotBlank
     @Size(max = 200)
     @Column(name = "degree_certificate_url", length = 200, nullable = false)
-    private String degreeCertificate;
+    private String degreeCertificateurl;
 
     @Size(max = 200)
     @Column(name = "resignation_letter_url", length = 200)
-    private String resignationLetter;
+    private String resignationLetterurl;
 
     @NotBlank
     @Size(max = 200)
     @Column(name = "resume_url", length = 200, nullable = false)
-    private String resume;
+    private String resumeurl;
 
     @PositiveOrZero
     @Max(50)

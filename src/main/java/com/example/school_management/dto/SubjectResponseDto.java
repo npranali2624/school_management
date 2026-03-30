@@ -4,6 +4,8 @@ import com.example.school_management.enums.Standard;
 import com.example.school_management.enums.SubjectType;
 import lombok.*;
 
+// ← Wrong import removed ✅
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +18,8 @@ public class SubjectResponseDto {
     private Standard standard;
     private Integer weeklyHours;
     private SubjectType subjectType;
-    private String subjectTeacher;
+    private Long subjectTeacherId;       // ← already correct ✅
+    private String subjectTeacherName;   // ← Added ✅
     private Integer theoryMarks;
     private Integer internalMarks;
     private Integer practicalMarks;

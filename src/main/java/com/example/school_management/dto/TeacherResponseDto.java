@@ -4,6 +4,8 @@ import com.example.school_management.enums.DegreeType;
 import com.example.school_management.enums.Gender;
 import com.example.school_management.enums.Role;
 import lombok.Data;
+
+import javax.security.auth.Subject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -40,7 +42,7 @@ public class TeacherResponseDto {
     private Role role;
 
 
-    private String subject;
+    private Subject subject;
     private String assignedClass;
     private String previousSchool;
 }

@@ -1,5 +1,7 @@
+
 package com.example.school_management.dto;
 
+import com.example.school_management.constants.ValidationMessages;
 import com.example.school_management.enums.Standard;
 import com.example.school_management.enums.SubjectType;
 import jakarta.validation.constraints.Min;
@@ -13,42 +15,42 @@ import lombok.*;
 @AllArgsConstructor
 public class SubjectRequestDto {
 
-    @NotBlank(message = "Subject name is required")
+    @NotBlank(message = ValidationMessages.SUBJECT_NAME_REQUIRED)
     private String subjectName;
 
     private Integer subjectCode;
 
     private Standard standard;
 
-    @NotNull(message = "Weekly hours is required")
-    @Min(value = 1, message = "Weekly hours must be at least 1")
+    @NotNull(message = ValidationMessages.WEEKLY_HOURS_REQUIRED)
+    @Min(value = 1, message = ValidationMessages.WEEKLY_HOURS_MIN)
     private Integer weeklyHours;
 
-    @NotNull(message = "Subject type is required")
+    @NotNull(message = ValidationMessages.SUBJECT_TYPE_REQUIRED)
     private SubjectType subjectType;
 
-    private String subjectTeacher;
+    private Long subjectTeacherId;   // ← Changed from String to Long ✅
 
-    @Min(value = 0, message = "Theory marks cannot be negative")
+    @Min(value = 0, message = ValidationMessages.THEORY_MARKS_MIN)
     private Integer theoryMarks;
 
-    @Min(value = 0, message = "Internal marks cannot be negative")
+    @Min(value = 0, message = ValidationMessages.INTERNAL_MARKS_MIN)
     private Integer internalMarks;
 
-    @Min(value = 0, message = "Practical marks cannot be negative")
+    @Min(value = 0, message = ValidationMessages.PRACTICAL_MARKS_MIN)
     private Integer practicalMarks;
 
-    @Min(value = 0, message = "Project marks cannot be negative")
+    @Min(value = 0, message = ValidationMessages.PROJECT_MARKS_MIN)
     private Integer projectMarks;
 
-    @Min(value = 0, message = "Oral marks cannot be negative")
+    @Min(value = 0, message = ValidationMessages.ORAL_MARKS_MIN)
     private Integer oralMarks;
 
-    @NotNull(message = "Total marks is required")
-    @Min(value = 0, message = "Total marks cannot be negative")
+    @NotNull(message = ValidationMessages.TOTAL_MARKS_REQUIRED)
+    @Min(value = 0, message = ValidationMessages.TOTAL_MARKS_MIN)
     private Integer totalMarks;
 
-    @NotNull(message = "Passing marks is required")
-    @Min(value = 0, message = "Passing marks cannot be negative")
+    @NotNull(message = ValidationMessages.PASSING_MARKS_REQUIRED)
+    @Min(value = 0, message = ValidationMessages.PASSING_MARKS_MIN)
     private Integer passingMarks;
 }

@@ -32,50 +32,44 @@ public class Subject {
     @Column(name = "standard", nullable = true, length = 20)
     private Standard standard;
 
-    // How many hours/periods this subject has per week
     @Min(1)
     @Column(name = "weekly_hours", nullable = false)
     private Integer weeklyHours;
 
-    // Is this subject compulsory or optional?
     @Enumerated(EnumType.STRING)
     @Column(name = "subject_type", nullable = false)
     private SubjectType subjectType;
 
-    @Column(name = "subject_teacher")
-    private String subjectTeacher;
 
-    // Written theory exam marks (e.g. 60)
+    //
+    @ManyToOne
+    @JoinColumn(name = "subject_teacher_id")
+    private Teacher subjectTeacher;
+
     @Min(0)
     @Column(name = "theory_marks")
     private Integer theoryMarks;
 
-    // Internal assessment marks (e.g. 10)
     @Min(0)
     @Column(name = "internal_marks")
     private Integer internalMarks;
 
-    // Practical/lab marks (e.g. 20) - applicable for Science, Computer etc.
     @Min(0)
     @Column(name = "practical_marks")
     private Integer practicalMarks;
 
-    // Project/assignment marks (e.g. 10)
     @Min(0)
     @Column(name = "project_marks")
     private Integer projectMarks;
 
-    // Oral/viva marks (e.g. 10) - applicable for languages etc.
     @Min(0)
     @Column(name = "oral_marks")
     private Integer oralMarks;
 
-    // Total marks (e.g. 100) - sum of all above
     @Min(0)
     @Column(name = "total_marks", nullable = false)
     private Integer totalMarks;
 
-    // Passing marks (e.g. 35)
     @Min(0)
     @Column(name = "passing_marks", nullable = false)
     private Integer passingMarks;

@@ -1,5 +1,6 @@
 package com.example.school_management.entity;
 
+import com.example.school_management.constants.ValidationMessages;
 import com.example.school_management.enums.Division;
 import com.example.school_management.enums.Standard;
 import jakarta.persistence.*;
@@ -21,12 +22,12 @@ public class Class {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Standard is required")
+    @NotNull(message = ValidationMessages.STANDARD_REQUIRED)
     @Enumerated(EnumType.STRING)
     @Column(name = "standard", nullable = false)
     private Standard standard;
 
-    @NotNull(message = "Division is required")
+    @NotNull(message = ValidationMessages.DIVISION_REQUIRED)
     @Enumerated(EnumType.STRING)
     @Column(name = "division", nullable = false)
     private Division division;
@@ -45,4 +46,9 @@ public class Class {
 
     @Column(name = "class_name", nullable = false)
     private String className;
+
+    // One class has ONE class teacher
+    @OneToOne
+    @JoinColumn(name = "class_teacher_id")
+    private Teacher classTeacher;
 }

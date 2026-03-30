@@ -1,5 +1,6 @@
 package com.example.school_management.entity;
 
+import com.example.school_management.constants.ValidationMessages;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -15,9 +16,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "parents")
-@Data                    // ← generates all getters + setters
-@NoArgsConstructor       // ← generates no-args constructor
-@AllArgsConstructor      // ← generates all-args constructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Parent {
 
     @Id
@@ -25,7 +26,7 @@ public class Parent {
     private Long id;
 
     // ── Father ──
-    @NotBlank(message = "Father's first name is required")
+    @NotBlank(message = ValidationMessages.FATHER_FIRST_NAME_REQUIRED)
     @Size(max = 50)
     @Column(name = "father_first_name", length = 50, nullable = false)
     private String fatherFirstName;
@@ -34,7 +35,7 @@ public class Parent {
     @Column(name = "father_middle_name", length = 50)
     private String fatherMiddleName;
 
-    @NotBlank(message = "Father's last name is required")
+    @NotBlank(message = ValidationMessages.FATHER_LAST_NAME_REQUIRED)
     @Size(max = 50)
     @Column(name = "father_last_name", length = 50, nullable = false)
     private String fatherLastName;
@@ -44,7 +45,7 @@ public class Parent {
     private String fatherOccupation;
 
     // ── Mother ──
-    @NotBlank(message = "Mother's first name is required")
+    @NotBlank(message = ValidationMessages.MOTHER_FIRST_NAME_REQUIRED)
     @Size(max = 50)
     @Column(name = "mother_first_name", length = 50, nullable = false)
     private String motherFirstName;
@@ -53,7 +54,7 @@ public class Parent {
     @Column(name = "mother_middle_name", length = 50)
     private String motherMiddleName;
 
-    @NotBlank(message = "Mother's last name is required")
+    @NotBlank(message = ValidationMessages.MOTHER_LAST_NAME_REQUIRED)
     @Size(max = 50)
     @Column(name = "mother_last_name", length = 50, nullable = false)
     private String motherLastName;
@@ -80,31 +81,29 @@ public class Parent {
     private String guardianRelation;
 
     // ── Contact ──
-    @NotBlank(message = "Primary mobile number is required")
-    @Pattern(regexp = "^[0-9]{10}$", message = "Primary mobile must be exactly 10 digits")
+    @NotBlank(message = ValidationMessages.MOBILE_PRIMARY_REQUIRED)
+    @Pattern(regexp = "^[0-9]{10}$", message = ValidationMessages.MOBILE_PRIMARY_PATTERN)
     @Column(name = "mobile_primary", length = 10, nullable = false)
     private String mobilePrimary;
 
-    @Pattern(regexp = "^[0-9]{10}$", message = "Alternate mobile must be exactly 10 digits")
+    @Pattern(regexp = "^[0-9]{10}$", message = ValidationMessages.MOBILE_ALTERNATE_PATTERN)
     @Column(name = "mobile_alternate", length = 10)
     private String mobileAlternate;
 
-    @Email(message = "Please provide a valid email address")
+    @Email(message = ValidationMessages.EMAIL_INVALID)
     @Size(max = 100)
     @Column(name = "email", length = 100, unique = true)
     private String email;
 
-
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @NotBlank(message = ValidationMessages.PASSWORD_REQUIRED)
+    @Size(min = 6, message = ValidationMessages.PASSWORD_MIN)
     @Column(name = "password", nullable = false)
     private String password;
 
-    @NotBlank(message = "Address line 1 is required")
+    @NotBlank(message = ValidationMessages.ADDRESS_LINE1_REQUIRED)
     @Size(max = 100)
     @Column(name = "address_line1", length = 100, nullable = false)
     private String addressLine1;
-
 
     // ── Back-reference to students (optional) ──
     @JsonIgnore

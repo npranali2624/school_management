@@ -3,8 +3,10 @@ package com.example.school_management.service.Impl;
 import com.example.school_management.dto.SubjectRequestDto;
 import com.example.school_management.dto.SubjectResponseDto;
 import com.example.school_management.entity.Subject;
+import com.example.school_management.entity.Teacher;
 import com.example.school_management.enums.SubjectType;
 import com.example.school_management.repo.SubjectRepository;
+import com.example.school_management.repo.TeacherRepo;
 import com.example.school_management.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 public class SubjectServiceImpl implements SubjectService {
 
     private final SubjectRepository subjectRepository;
+    private final TeacherRepo teacherRepository; // ← Added
 
     private Subject mapToEntity(SubjectRequestDto request) {
         Subject subject = new Subject();
@@ -23,7 +26,6 @@ public class SubjectServiceImpl implements SubjectService {
         subject.setSubjectCode(request.getSubjectCode());
         subject.setWeeklyHours(request.getWeeklyHours());
         subject.setSubjectType(request.getSubjectType());
-        subject.setSubjectTeacher(request.getSubjectTeacher());
         subject.setTheoryMarks(request.getTheoryMarks());
         subject.setInternalMarks(request.getInternalMarks());
         subject.setPracticalMarks(request.getPracticalMarks());
@@ -31,6 +33,14 @@ public class SubjectServiceImpl implements SubjectService {
         subject.setOralMarks(request.getOralMarks());
         subject.setTotalMarks(request.getTotalMarks());
         subject.setPassingMarks(request.getPassingMarks());
+
+        // ✅ Fetch Teacher from DB using ID
+        if (request.getSubjectTeacherId() != null) {
+            Teacher teacher = teacherRepository.findById(request.getSubjectTeacherId())
+                    .orElseThrow(() -> new RuntimeException(
+                            "Teacher not found with id: " + request.getSubjectTeacherId()));
+            subject.setSubjectTeacher(teacher);
+        }
 
         if (request.getSubjectType() == SubjectType.COMPULSORY) {
             subject.setStandard(null);
@@ -48,7 +58,6 @@ public class SubjectServiceImpl implements SubjectService {
         response.setStandard(subject.getStandard());
         response.setWeeklyHours(subject.getWeeklyHours());
         response.setSubjectType(subject.getSubjectType());
-        response.setSubjectTeacher(subject.getSubjectTeacher());
         response.setTheoryMarks(subject.getTheoryMarks());
         response.setInternalMarks(subject.getInternalMarks());
         response.setPracticalMarks(subject.getPracticalMarks());
@@ -56,6 +65,14 @@ public class SubjectServiceImpl implements SubjectService {
         response.setOralMarks(subject.getOralMarks());
         response.setTotalMarks(subject.getTotalMarks());
         response.setPassingMarks(subject.getPassingMarks());
+
+        // ✅ Set teacher details in response
+        if (subject.getSubjectTeacher() != null) {
+            response.setSubjectTeacherId(subject.getSubjectTeacher().getId());
+            response.setSubjectTeacherName(
+                    subject.getSubjectTeacher().getFirstName()
+                            + " " + subject.getSubjectTeacher().getLastName());
+        }
         return response;
     }
 
@@ -73,6 +90,7 @@ public class SubjectServiceImpl implements SubjectService {
         Subject saved = subjectRepository.save(mapToEntity(request));
         return mapToResponseDto(saved);
     }
+
     @Override
     public List<SubjectResponseDto> getAllSubjects() {
         return subjectRepository.findAll()
@@ -80,6 +98,7 @@ public class SubjectServiceImpl implements SubjectService {
                 .map(this::mapToResponseDto)
                 .toList();
     }
+
     @Override
     public SubjectResponseDto getSubjectByCode(Integer subjectCode) {
         Subject subject = subjectRepository.findBySubjectCode(subjectCode)
@@ -87,9 +106,9 @@ public class SubjectServiceImpl implements SubjectService {
                         "Subject not found with code: " + subjectCode));
         return mapToResponseDto(subject);
     }
+
     @Override
     public SubjectResponseDto updateSubject(Integer subjectCode, SubjectRequestDto request) {
-        // Find existing subject by subjectCode
         Subject existing = subjectRepository.findBySubjectCode(subjectCode)
                 .orElseThrow(() -> new RuntimeException(
                         "Subject not found with code: " + subjectCode));
@@ -101,10 +120,11 @@ public class SubjectServiceImpl implements SubjectService {
         }
 
         Subject updated = mapToEntity(request);
-        updated.setId(existing.getId()); // keep same DB id for Hibernate to UPDATE not INSERT
+        updated.setId(existing.getId());
         Subject saved = subjectRepository.save(updated);
         return mapToResponseDto(saved);
     }
+
     @Override
     public void deleteSubject(Integer subjectCode) {
         if (!subjectRepository.existsBySubjectCode(subjectCode)) {

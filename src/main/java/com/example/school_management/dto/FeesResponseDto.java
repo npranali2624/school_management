@@ -1,7 +1,9 @@
 package com.example.school_management.dto;
 
+import com.example.school_management.enums.FeeType;
 import com.example.school_management.enums.FineType;
 import com.example.school_management.enums.PaymentCycle;
+import com.example.school_management.enums.Standard;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +17,7 @@ import java.util.List;
 public class FeesResponseDto {
 
     private Long id;
-    private String std;        // ✅ changed Integer → String
+    private Standard std;
     private List<FeeItemDTO> feeItems;
     private PaymentCycle paymentCycle;
     private String academicYear;
@@ -30,7 +32,7 @@ public class FeesResponseDto {
     @Data
     @Builder
     public static class FeeItemDTO {
-        private String feeType;
+        private FeeType feeType;
         private String feeTypeCode;
         private BigDecimal amount;
     }
