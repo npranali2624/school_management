@@ -14,31 +14,26 @@ public class ClassServiceImpl implements ClassService {
 
     private final ClassRepository classRepository;
 
-    // ✅ CREATE
+
     @Override
     public Class createClass(Class classEntity) {
 
-        // 🔥 FIX: Generate className before saving
         String className = classEntity.getStandard() + "-" + classEntity.getDivision();
         classEntity.setClassName(className);
 
         return classRepository.save(classEntity);
     }
 
-    // ✅ GET ALL
     @Override
     public List<Class> getAllClasses() {
         return classRepository.findAll();
     }
 
-    // ✅ GET BY ID
     @Override
     public Class getClassById(Long id) {
         return classRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Class not found with id: " + id));
     }
-
-    // ✅ UPDATE
     @Override
     public Class updateClass(Long id, Class classEntity) {
 
@@ -50,14 +45,12 @@ public class ClassServiceImpl implements ClassService {
         existing.setBoys(classEntity.getBoys());
         existing.setGirls(classEntity.getGirls());
 
-        // 🔥 IMPORTANT: regenerate className on update
         String className = existing.getStandard() + "-" + existing.getDivision();
         existing.setClassName(className);
 
         return classRepository.save(existing);
     }
 
-    // ✅ DELETE
     @Override
     public void deleteClass(Long id) {
         classRepository.deleteById(id);

@@ -24,10 +24,8 @@ public class Teacher extends Employee {
     @Column(name = "previous_school", length = 100)
     private String previousSchool;
 
-    // Teacher is class teacher of ONE class
     @OneToOne(mappedBy = "classTeacher")
     private Class assignedClass;
-
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
@@ -37,6 +35,10 @@ public class Teacher extends Employee {
     @Builder.Default
     @OneToMany(mappedBy = "subjectTeacher")
     private List<Subject> subjects = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "specialization_subject_id")
+    private Subject specialization;
 
 
     // One Teacher → Many Complaints

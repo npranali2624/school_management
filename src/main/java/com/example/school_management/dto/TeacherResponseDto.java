@@ -25,7 +25,6 @@ public class TeacherResponseDto {
     private String mobile;
     private Gender gender;
     private LocalDate dob;
-    private String street;
     private String city;
     private String state;
     private String pincode;
@@ -40,6 +39,9 @@ public class TeacherResponseDto {
     private String resume;
     private Integer yearsOfExperience;
     private Role role;
+    private Long specializationId;
+    private String addressLine1;
+    private String addressLine2;
 
 
     private Subject subject;

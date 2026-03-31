@@ -26,7 +26,6 @@ public class ComplaintServiceImpl implements ComplaintService {
     private final StudentRepository studentRepository;
     private final TeacherRepo teacherRepository;
 
-    // ── Create ──
     @Override
     public ComplaintResponseDto createComplaint(ComplaintRequestDto request) {
 
@@ -40,14 +39,13 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .status(ComplaintStatus.PENDING)
                 .build();
 
-        // Link student if provided
         if (request.getStudentId() != null) {
             Student student = studentRepository.findById(request.getStudentId())
                     .orElseThrow(() -> new RuntimeException("Student not found"));
             complaint.setStudent(student);
         }
 
-        // Link teacher if provided
+
         if (request.getTeacherId() != null) {
             Teacher teacher = teacherRepository.findById(request.getTeacherId())
                     .orElseThrow(() -> new RuntimeException("Teacher not found"));
@@ -57,7 +55,6 @@ public class ComplaintServiceImpl implements ComplaintService {
         return mapToResponse(complaintRepository.save(complaint));
     }
 
-    // ── Get All ──
     @Override
     public List<ComplaintResponseDto> getAllComplaints() {
         return complaintRepository.findAll()
@@ -65,14 +62,12 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .collect(Collectors.toList());
     }
 
-    // ── Get By ID ──
     @Override
     public ComplaintResponseDto getComplaintById(Long id) {
         return mapToResponse(complaintRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Complaint not found")));
     }
 
-    // ── Get By Student ──
     @Override
     public List<ComplaintResponseDto> getComplaintsByStudent(Long studentId) {
         return complaintRepository.findByStudentId(studentId)
@@ -80,7 +75,6 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .collect(Collectors.toList());
     }
 
-    // ── Get By Teacher ──
     @Override
     public List<ComplaintResponseDto> getComplaintsByTeacher(Long teacherId) {
         return complaintRepository.findByTeacherId(teacherId)
@@ -88,7 +82,6 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .collect(Collectors.toList());
     }
 
-    // ── Get By Status ──
     @Override
     public List<ComplaintResponseDto> getComplaintsByStatus(ComplaintStatus status) {
         return complaintRepository.findByStatus(status)
@@ -96,7 +89,6 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .collect(Collectors.toList());
     }
 
-    // ── Get By Priority ──
     @Override
     public List<ComplaintResponseDto> getComplaintsByPriority(Priority priority) {
         return complaintRepository.findByPriority(priority)
@@ -104,15 +96,12 @@ public class ComplaintServiceImpl implements ComplaintService {
                 .collect(Collectors.toList());
     }
 
-    // ── Get By Category ──
     @Override
     public List<ComplaintResponseDto> getComplaintsByCategory(ComplaintCategory category) {
         return complaintRepository.findByCategory(category)
                 .stream().map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
-
-    // ── Update Status ──
     @Override
     public ComplaintResponseDto updateStatus(Long id, ComplaintStatus status) {
         Complaint complaint = complaintRepository.findById(id)
@@ -121,7 +110,6 @@ public class ComplaintServiceImpl implements ComplaintService {
         return mapToResponse(complaintRepository.save(complaint));
     }
 
-    // ── Resolve ──
     @Override
     public ComplaintResponseDto resolveComplaint(Long id, String resolutionComment,
                                                  String resolvedBy) {
@@ -134,7 +122,6 @@ public class ComplaintServiceImpl implements ComplaintService {
         return mapToResponse(complaintRepository.save(complaint));
     }
 
-    // ── Delete ──
     @Override
     public void deleteComplaint(Long id) {
         if (!complaintRepository.existsById(id))
@@ -142,7 +129,6 @@ public class ComplaintServiceImpl implements ComplaintService {
         complaintRepository.deleteById(id);
     }
 
-    // ── Mapper ──
     private ComplaintResponseDto mapToResponse(Complaint c) {
         return ComplaintResponseDto.builder()
                 .id(c.getId())

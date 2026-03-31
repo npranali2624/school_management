@@ -27,11 +27,13 @@ public class ValidationMessages {
 
     public static final String AADHAR_REQUIRED = "Aadhar number is required";
     public static final String AADHAR_PATTERN = "Aadhar number must be exactly 12 digits";
-
+//    public static final String AADHAR_OWNER_REQUIRED      = "Please specify whose Aadhar this is (FATHER, MOTHER, or GUARDIAN)";
+//    public static final String AADHAR_PHOTO_REQUIRED      = "Aadhar photo is required";
 
     public static final String MOBILE_PRIMARY_REQUIRED = "Primary mobile is required";
     public static final String MOBILE_PRIMARY_PATTERN = "Primary mobile must be 10 digits";
     public static final String MOBILE_ALTERNATE_PATTERN = "Alternate mobile must be 10 digits";
+    public static  final String EMERGENCY_CONTACT_NUMBER_PATTERN = "Emergency contact number must be a valid 10-digit number";
     public static final String EMAIL_INVALID = "Email is invalid";
 
 
@@ -45,12 +47,6 @@ public class ValidationMessages {
     public static final String PREVIOUS_SCHOOL_MAX = "Previous school name must not exceed 150 characters";
     public static final String PERCENTAGE_MIN = "Percentage cannot be negative";
     public static final String PERCENTAGE_MAX = "Percentage cannot exceed 100";
-
-
-    public static final String BIRTH_CERTIFICATE_REQUIRED = "Birth certificate is required";
-    public static final String AADHAR_PHOTO_REQUIRED = "Aadhar photo is required";
-    public static final String PASSPORT_PHOTO_REQUIRED = "Passport-size photo is required";
-
 
 
     public static final String FATHER_FIRST_NAME_REQUIRED = "Father's first name is required";
@@ -89,8 +85,6 @@ public class ValidationMessages {
     public static final String FEE_AMOUNT_MIN = "Amount must be greater than 0";
     public static final String FEE_AMOUNT_FORMAT = "Invalid amount format";
 
-
-    // ─── Teacher ──────────────────────────────────────
     public static final String MIDDLE_NAME_REQUIRED = "Middle name is required";
     public static final String EMAIL_REQUIRED = "Email is required";
     public static final String EMAIL_FORMAT_INVALID = "Invalid email format";
@@ -130,7 +124,7 @@ public class ValidationMessages {
     public static final String PASSING_MARKS_REQUIRED = "Passing marks is required";
     public static final String PASSING_MARKS_MIN = "Passing marks cannot be negative";
 
-    // ─── Complaint ──────────────────────────────────────
+
     public static final String COMPLAINT_TITLE_REQUIRED = "Title is required";
     public static final String COMPLAINT_TITLE_MAX = "Title must not exceed 150 characters";
     public static final String COMPLAINT_DESCRIPTION_REQUIRED = "Description is required";
@@ -154,4 +148,5 @@ public class ValidationMessages {
     public static final String MARKING_TYPE_REQUIRED = "Marking type is required";
     public static final String ASSIGNMENT_TITLE_MAX = "Assignment title must not exceed 255 characters";
     public static final String ASSIGNMENT_DESCRIPTION_MAX = "Assignment description must not exceed 2000 characters";
+    public static final String SPECIALIZATION_REQUIRED = "Specialization is required";
 }

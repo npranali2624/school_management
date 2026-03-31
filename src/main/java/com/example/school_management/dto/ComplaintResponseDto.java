@@ -22,15 +22,12 @@ public class ComplaintResponseDto {
     private String resolvedBy;
     private Instant resolvedAt;
 
-    // Student info
     private Long studentId;
     private String studentName;
 
-    // Teacher info
     private Long teacherId;
     private String teacherName;
 
-    // Audit
     private Instant createdAt;
     private Instant updatedAt;
 }

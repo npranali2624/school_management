@@ -56,9 +56,13 @@ public abstract class Employee extends BaseEntity {
     @Column(name = "dob")
     private LocalDate dob;
 
-    @Size(max = 50)
-    @Column(name = "street", length = 50)
-    private String street;
+    @Size(max = 100)
+    @Column(name = "address_line1", length = 100, nullable = false)
+    private String addressLine1;
+
+    @Size(max = 100)
+    @Column(name = "address_line2", length = 100)
+    private String addressLine2;
 
     @Size(max = 50)
     @Column(name = "city", length = 50)
@@ -76,7 +80,7 @@ public abstract class Employee extends BaseEntity {
     @Column(name = "degree_type", length = 50, nullable = false)
     private DegreeType degreeType;
 
-    // only filled when degreeType = OTHER
+
     @Column(name = "custom_degree_name", length = 150)
     private String customDegreeName;
 
@@ -95,28 +99,27 @@ public abstract class Employee extends BaseEntity {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
-    @NotBlank
     @Size(max = 200)
-    @Column(name = "aadhar_photo_url", length = 200, nullable = false)
+    @Column(name = "aadhar_photo_url", length = 200)
     private String aadharPhotourl;
 
-    @NotBlank
+
     @Size(max = 200)
-    @Column(name = "pan_photo_url", length = 200, nullable = false)
+    @Column(name = "pan_photo_url", length = 200)
     private String panPhotourl;
 
-    @NotBlank
+
     @Size(max = 200)
-    @Column(name = "degree_certificate_url", length = 200, nullable = false)
+    @Column(name = "degree_certificate_url", length = 200)
     private String degreeCertificateurl;
 
     @Size(max = 200)
     @Column(name = "resignation_letter_url", length = 200)
     private String resignationLetterurl;
 
-    @NotBlank
+
     @Size(max = 200)
-    @Column(name = "resume_url", length = 200, nullable = false)
+    @Column(name = "resume_url", length = 200)
     private String resumeurl;
 
     @PositiveOrZero

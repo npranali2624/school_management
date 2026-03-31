@@ -30,21 +30,19 @@ public class PaymentServiceImpl implements PaymentService {
 
         Payment payment = new Payment();
 
-        // Required fields
         payment.setTotalAmount(request.getTotalAmount());
         payment.setPaymentDate(LocalDate.now());
         payment.setModeofpayment(ModeOfPayment.fromString(request.getModeofpayment()));
         payment.setRemarks(request.getRemarks());
         payment.setStatus(PaymentStatus.COMPLETED);
 
-        // Optional fields
         payment.setTransactionId(request.getTransactionId());
         payment.setUpiId(request.getUpiId());
         payment.setBankName(request.getBankName());
         payment.setChequeNumber(request.getChequeNumber());
         payment.setChequeDate(request.getChequeDate());
 
-        // Fetch student and set
+
         Student student = null;
         if (request.getStudentId() != null) {
             student = studentRepository.findById(request.getStudentId())
@@ -53,31 +51,28 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setStudent(student);
         }
 
-        // Auto-generate receipt and reference number
         String receipt = ReceiptGenerator.generateReceipt(payment.getModeofpayment());
         String referenceNumber = ReceiptGenerator.generateReferenceNumber(payment.getModeofpayment());
         payment.setReceiptNumber(receipt);
         payment.setReferenceNumber(referenceNumber);
 
-        // Save
         paymentRepository.save(payment);
 
-        // ✅ Send email — access email via student.getParent()
         if (student != null
                 && student.getParent() != null
-                && student.getParent().getEmail() != null) {   // ✅ fixed
+                && student.getParent().getEmail() != null) {
             try {
                 byte[] pdfBytes = ReceiptPdfGenerator.generateReceiptPdf(payment);
                 String studentName = student.getFirstName() + " " + student.getLastName();
 
                 emailService.sendReceiptEmail(
-                        student.getParent().getEmail(),        // ✅ fixed
+                        student.getParent().getEmail(),
                         studentName,
                         receipt,
                         pdfBytes
                 );
             } catch (Exception e) {
-                // Payment won't fail if email fails
+
                 System.out.println("Email sending failed: " + e.getMessage());
             }
         }

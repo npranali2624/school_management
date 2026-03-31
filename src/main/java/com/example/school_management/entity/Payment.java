@@ -48,7 +48,6 @@ public class Payment extends BaseEntity {
     @Column(name = "upi_id", length = 50)
     private String upiId;
 
-    // CHECK / DEMAND_DRAFT
     @Size(max = 50, message = ValidationMessages.CHEQUE_NUMBER_MAX)
     @Column(name = "cheque_number", length = 50)
     private String chequeNumber;
@@ -56,7 +55,6 @@ public class Payment extends BaseEntity {
     @Column(name = "cheque_date")
     private LocalDate chequeDate;
 
-    // NET_BANKING / CARD
     @Size(max = 100, message = ValidationMessages.BANK_NAME_MAX)
     @Column(name = "bank_name", length = 100)
     private String bankName;

@@ -37,7 +37,7 @@ public class FeesMapper
 
         List<FeesResponseDto.FeeItemDTO> feeItemDTOs = fees.getFeeItems().stream()
                 .map(item -> FeesResponseDto.FeeItemDTO.builder()
-                        .feeType(item.getFeeType())          // ← Remove .getDisplayName() ✅
+                        .feeType(item.getFeeType())
                         .feeTypeCode(item.getFeeType().name())
                         .amount(item.getAmount())
                         .build())
@@ -45,7 +45,7 @@ public class FeesMapper
 
         return FeesResponseDto.builder()
                 .id(fees.getId())
-                .std(fees.getStd())              // ← Remove .getValue() ✅
+                .std(fees.getStd())
                 .feeItems(feeItemDTOs)
                 .paymentCycle(fees.getPaymentCycle())
                 .academicYear(fees.getAcademicYear())

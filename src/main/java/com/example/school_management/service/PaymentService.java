@@ -6,6 +6,6 @@ import com.example.school_management.dto.PaymentResponseDto;
 public interface PaymentService {
 
     PaymentResponseDto makePayment(PaymentRequestDto request);
-    // Download receipt PDF by receipt number
+
     byte[] downloadReceiptPdf(String receiptNumber);
 }

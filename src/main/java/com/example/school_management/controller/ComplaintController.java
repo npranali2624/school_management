@@ -1,5 +1,6 @@
 package com.example.school_management.controller;
 
+import com.example.school_management.dto.ApiResponse;
 import com.example.school_management.dto.ComplaintRequestDto;
 import com.example.school_management.dto.ComplaintResponseDto;
 import com.example.school_management.enums.ComplaintCategory;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -20,83 +22,132 @@ public class ComplaintController {
 
     private final ComplaintService complaintService;
 
-    // ── POST /api/complaints ──
     @PostMapping
-    public ResponseEntity<ComplaintResponseDto> createComplaint(
+    public ResponseEntity<ApiResponse<ComplaintResponseDto>> createComplaint(
             @Valid @RequestBody ComplaintRequestDto request) {
+
+        ComplaintResponseDto response = complaintService.createComplaint(request);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(complaintService.createComplaint(request));
+                .body(ApiResponse.ok("Complaint created successfully", response));
     }
 
-    // ── GET /api/complaints ──
     @GetMapping
-    public ResponseEntity<List<ComplaintResponseDto>> getAllComplaints() {
-        return ResponseEntity.ok(complaintService.getAllComplaints());
+    public ResponseEntity<ApiResponse<List<ComplaintResponseDto>>> getAllComplaints() {
+
+        List<ComplaintResponseDto> response = complaintService.getAllComplaints();
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Complaints fetched successfully", response)
+        );
     }
 
-    // ── GET /api/complaints/{id} ──
     @GetMapping("/{id}")
-    public ResponseEntity<ComplaintResponseDto> getComplaintById(@PathVariable Long id) {
-        return ResponseEntity.ok(complaintService.getComplaintById(id));
+    public ResponseEntity<ApiResponse<ComplaintResponseDto>> getComplaintById(
+            @PathVariable Long id) {
+
+        ComplaintResponseDto response = complaintService.getComplaintById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Complaint fetched successfully", response)
+        );
     }
 
-    // ── GET /api/complaints/student/{studentId} ──
     @GetMapping("/student/{studentId}")
-    public ResponseEntity<List<ComplaintResponseDto>> getByStudent(
+    public ResponseEntity<ApiResponse<List<ComplaintResponseDto>>> getByStudent(
             @PathVariable Long studentId) {
-        return ResponseEntity.ok(complaintService.getComplaintsByStudent(studentId));
+
+        List<ComplaintResponseDto> response =
+                complaintService.getComplaintsByStudent(studentId);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Student complaints fetched successfully", response)
+        );
     }
 
-    // ── GET /api/complaints/teacher/{teacherId} ──
     @GetMapping("/teacher/{teacherId}")
-    public ResponseEntity<List<ComplaintResponseDto>> getByTeacher(
+    public ResponseEntity<ApiResponse<List<ComplaintResponseDto>>> getByTeacher(
             @PathVariable Long teacherId) {
-        return ResponseEntity.ok(complaintService.getComplaintsByTeacher(teacherId));
+
+        List<ComplaintResponseDto> response =
+                complaintService.getComplaintsByTeacher(teacherId);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Teacher complaints fetched successfully", response)
+        );
     }
 
-    // ── GET /api/complaints/status/{status} ──
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<ComplaintResponseDto>> getByStatus(
+    public ResponseEntity<ApiResponse<List<ComplaintResponseDto>>> getByStatus(
             @PathVariable ComplaintStatus status) {
-        return ResponseEntity.ok(complaintService.getComplaintsByStatus(status));
+
+        List<ComplaintResponseDto> response =
+                complaintService.getComplaintsByStatus(status);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Complaints by status fetched successfully", response)
+        );
     }
 
-    // ── GET /api/complaints/priority/{priority} ──
     @GetMapping("/priority/{priority}")
-    public ResponseEntity<List<ComplaintResponseDto>> getByPriority(
+    public ResponseEntity<ApiResponse<List<ComplaintResponseDto>>> getByPriority(
             @PathVariable Priority priority) {
-        return ResponseEntity.ok(complaintService.getComplaintsByPriority(priority));
+
+        List<ComplaintResponseDto> response =
+                complaintService.getComplaintsByPriority(priority);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Complaints by priority fetched successfully", response)
+        );
     }
 
-    // ── GET /api/complaints/category/{category} ──
     @GetMapping("/category/{category}")
-    public ResponseEntity<List<ComplaintResponseDto>> getByCategory(
+    public ResponseEntity<ApiResponse<List<ComplaintResponseDto>>> getByCategory(
             @PathVariable ComplaintCategory category) {
-        return ResponseEntity.ok(complaintService.getComplaintsByCategory(category));
+
+        List<ComplaintResponseDto> response =
+                complaintService.getComplaintsByCategory(category);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Complaints by category fetched successfully", response)
+        );
     }
 
-    // ── PATCH /api/complaints/{id}/status ──
     @PatchMapping("/{id}/status")
-    public ResponseEntity<ComplaintResponseDto> updateStatus(
+    public ResponseEntity<ApiResponse<ComplaintResponseDto>> updateStatus(
             @PathVariable Long id,
             @RequestParam ComplaintStatus status) {
-        return ResponseEntity.ok(complaintService.updateStatus(id, status));
+
+        ComplaintResponseDto response =
+                complaintService.updateStatus(id, status);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Complaint status updated successfully", response)
+        );
     }
 
-    // ── PATCH /api/complaints/{id}/resolve ──
     @PatchMapping("/{id}/resolve")
-    public ResponseEntity<ComplaintResponseDto> resolveComplaint(
+    public ResponseEntity<ApiResponse<ComplaintResponseDto>> resolveComplaint(
             @PathVariable Long id,
             @RequestParam String resolutionComment,
             @RequestParam String resolvedBy) {
-        return ResponseEntity.ok(complaintService
-                .resolveComplaint(id, resolutionComment, resolvedBy));
+
+        ComplaintResponseDto response =
+                complaintService.resolveComplaint(id, resolutionComment, resolvedBy);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Complaint resolved successfully", response)
+        );
     }
 
-    // ── DELETE /api/complaints/{id} ──
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteComplaint(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteComplaint(
+            @PathVariable Long id) {
+
         complaintService.deleteComplaint(id);
-        return ResponseEntity.ok("Complaint deleted successfully");
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Complaint deleted successfully", null)
+        );
     }
 }

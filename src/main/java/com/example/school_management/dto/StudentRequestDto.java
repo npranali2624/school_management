@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Data
 public class StudentRequestDto {
 
-    // Personal Info
     @NotBlank(message = ValidationMessages.FIRST_NAME_REQUIRED)
     private String firstName;
 
@@ -45,7 +44,6 @@ public class StudentRequestDto {
     @NotNull(message = ValidationMessages.CATEGORY_REQUIRED)
     private Category category;
 
-    // Parent Info
     @NotBlank(message = ValidationMessages.FATHER_FIRST_NAME_REQUIRED)
     private String fatherFirstName;
     private String fatherMiddleName;
@@ -67,7 +65,6 @@ public class StudentRequestDto {
     private String guardianLastName;
     private String guardianRelation;
 
-    // Contact
     @NotBlank(message = ValidationMessages.MOBILE_PRIMARY_REQUIRED)
     @Pattern(regexp = "^[0-9]{10}$", message = ValidationMessages.MOBILE_PRIMARY_PATTERN)
     private String mobilePrimary;
@@ -75,12 +72,16 @@ public class StudentRequestDto {
     @Pattern(regexp = "^[0-9]{10}$", message = ValidationMessages.MOBILE_ALTERNATE_PATTERN)
     private String mobileAlternate;
 
+    private String emergencyContactName;
+
+    @Pattern(regexp = "^[0-9]{10}$", message = ValidationMessages.EMERGENCY_CONTACT_NUMBER_PATTERN)
+    private String emergencyContactNumber;
+
     @Email(message = ValidationMessages.EMAIL_INVALID)
     private String email;
 
     private String password;
 
-    // Address
     @NotBlank(message = ValidationMessages.ADDRESS_LINE1_REQUIRED)
     private String addressLine1;
     private String addressLine2;
@@ -95,23 +96,18 @@ public class StudentRequestDto {
     @Pattern(regexp = "^[0-9]{6}$", message = ValidationMessages.PINCODE_PATTERN)
     private String pincode;
 
-    // Academic
     private String previousSchool;
 
     @DecimalMin(value = "0.0", message = ValidationMessages.PERCENTAGE_MIN)
     @DecimalMax(value = "100.0", message = ValidationMessages.PERCENTAGE_MAX)
     private Double previousPercentage;
 
-    // Documents
-    @NotBlank(message = ValidationMessages.BIRTH_CERTIFICATE_REQUIRED)
     private String birthCertificateUrl;
 
-    @NotBlank(message = ValidationMessages.AADHAR_PHOTO_REQUIRED)
     private String aadharPhotoUrl;
 
     private String previousMarksheetUrl;
 
-    @NotBlank(message = ValidationMessages.PASSPORT_PHOTO_REQUIRED)
     private String passportPhotoUrl;
 
     private String leavingCertificateUrl;

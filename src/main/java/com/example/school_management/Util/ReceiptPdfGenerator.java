@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 
 public class ReceiptPdfGenerator {
 
-    // ✅ Hardcoded school details — change as per your school
     private static final String SCHOOL_NAME    = "ABC SCHOOL";
     private static final String SCHOOL_ADDRESS = "123 Main Street, Mumbai, Maharashtra - 400001";
     private static final String SCHOOL_PHONE   = "9876543210";
@@ -28,7 +27,6 @@ public class ReceiptPdfGenerator {
         PdfWriter.getInstance(document, out);
         document.open();
 
-        // ── Fonts ───────────────────────────────────────────
         Font schoolFont  = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
         Font addressFont = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
         Font titleFont   = new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD);
@@ -37,7 +35,6 @@ public class ReceiptPdfGenerator {
         Font valueFont   = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
         Font footerFont  = new Font(Font.FontFamily.HELVETICA, 9, Font.ITALIC);
 
-        // ── School Header ────────────────────────────────────
         Paragraph schoolName = new Paragraph(SCHOOL_NAME, schoolFont);
         schoolName.setAlignment(Element.ALIGN_CENTER);
         document.add(schoolName);
@@ -50,7 +47,6 @@ public class ReceiptPdfGenerator {
 
         document.add(Chunk.NEWLINE);
 
-        // ── Receipt Title ────────────────────────────────────
         Paragraph title = new Paragraph("PAYMENT RECEIPT", titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
@@ -58,7 +54,6 @@ public class ReceiptPdfGenerator {
         document.add(new Paragraph(LINE, valueFont));
         document.add(Chunk.NEWLINE);
 
-        // ── Receipt Info ─────────────────────────────────────
         document.add(new Paragraph("Receipt No      : " + payment.getReceiptNumber(), labelFont));
         document.add(new Paragraph("Reference No    : " + payment.getReferenceNumber(), valueFont));
         document.add(new Paragraph("Payment Date    : " + payment.getPaymentDate(), valueFont));
@@ -67,7 +62,6 @@ public class ReceiptPdfGenerator {
         document.add(new Paragraph(LINE, valueFont));
         document.add(Chunk.NEWLINE);
 
-        // ── Student Details ──────────────────────────────────
         if (payment.getStudent() != null) {
             Student s = payment.getStudent();
 
@@ -80,8 +74,6 @@ public class ReceiptPdfGenerator {
             document.add(new Paragraph("Student Name    : " + fullName, valueFont));
             document.add(new Paragraph("Roll Number     : " + s.getRollNumber(), valueFont));
 
-
-            // BEFORE (wrong)
             if (s.getParent() != null) {
                 document.add(new Paragraph(
                         "Contact         : " + s.getParent().getMobilePrimary(), valueFont));
@@ -96,7 +88,6 @@ public class ReceiptPdfGenerator {
             document.add(Chunk.NEWLINE);
         }
 
-        // ── Fee Details ──────────────────────────────────────
         if (payment.getFees() != null) {
             Fees fees = payment.getFees();
 
@@ -122,13 +113,11 @@ public class ReceiptPdfGenerator {
             document.add(Chunk.NEWLINE);
         }
 
-        // ── Payment Details ──────────────────────────────────
         document.add(new Paragraph("PAYMENT DETAILS", sectionFont));
         document.add(Chunk.NEWLINE);
         document.add(new Paragraph("Payment Mode    : " + payment.getModeofpayment().name(), valueFont));
         document.add(new Paragraph("Status          : " + payment.getStatus().name(), valueFont));
 
-        // ✅ Dynamic based on payment mode
         switch (payment.getModeofpayment()) {
             case UPI:
                 document.add(new Paragraph("UPI ID          : " + payment.getUpiId(), valueFont));
@@ -158,7 +147,6 @@ public class ReceiptPdfGenerator {
         document.add(new Paragraph(LINE, valueFont));
         document.add(Chunk.NEWLINE);
 
-        // ── Footer ───────────────────────────────────────────
         String generatedOn = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
 

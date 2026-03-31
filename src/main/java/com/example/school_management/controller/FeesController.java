@@ -1,5 +1,6 @@
 package com.example.school_management.controller;
 
+import com.example.school_management.dto.ApiResponse;
 import com.example.school_management.dto.FeesRequestDto;
 import com.example.school_management.dto.FeesResponseDto;
 import com.example.school_management.enums.Standard;
@@ -22,52 +23,91 @@ public class FeesController {
     private final FeeService feesService;
 
     @PostMapping
-    public ResponseEntity<FeesResponseDto> createFees(
+    public ResponseEntity<ApiResponse<FeesResponseDto>> createFees(
             @Valid @RequestBody FeesRequestDto requestDTO) {
+
         FeesResponseDto response = feesService.createFees(requestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Fees created successfully", response));
     }
 
     @GetMapping
-    public ResponseEntity<List<FeesResponseDto>> getAllFees() {
-        return ResponseEntity.ok(feesService.getAllFees());
+    public ResponseEntity<ApiResponse<List<FeesResponseDto>>> getAllFees() {
+
+        List<FeesResponseDto> response = feesService.getAllFees();
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Fees fetched successfully", response)
+        );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FeesResponseDto> getFeesById(@PathVariable Long id) {
-        return ResponseEntity.ok(feesService.getFeesById(id));
+    public ResponseEntity<ApiResponse<FeesResponseDto>> getFeesById(
+            @PathVariable Long id) {
+
+        FeesResponseDto response = feesService.getFeesById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Fees fetched successfully", response)
+        );
     }
 
     @GetMapping("/std/{std}")
-    public ResponseEntity<List<FeesResponseDto>> getFeesByStd(
+    public ResponseEntity<ApiResponse<List<FeesResponseDto>>> getFeesByStd(
             @PathVariable Standard std) {
-        return ResponseEntity.ok(feesService.getFeesByStd(std));
+
+        List<FeesResponseDto> response = feesService.getFeesByStd(std);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Fees by standard fetched successfully", response)
+        );
     }
 
     @GetMapping("/std/{std}/year/{academicYear}")
-    public ResponseEntity<List<FeesResponseDto>> getFeesByStdAndYear(
+    public ResponseEntity<ApiResponse<List<FeesResponseDto>>> getFeesByStdAndYear(
             @PathVariable Standard std,
             @PathVariable String academicYear) {
-        return ResponseEntity.ok(feesService.getFeesByStdAndYear(std, academicYear));
+
+        List<FeesResponseDto> response =
+                feesService.getFeesByStdAndYear(std, academicYear);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Fees by standard and year fetched successfully", response)
+        );
     }
 
     @PatchMapping("/{id}/pay")
-    public ResponseEntity<FeesResponseDto> markAsPaid(@PathVariable Long id) {
-        return ResponseEntity.ok(feesService.markAsPaid(id));
+    public ResponseEntity<ApiResponse<FeesResponseDto>> markAsPaid(
+            @PathVariable Long id) {
+
+        FeesResponseDto response = feesService.markAsPaid(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Fees marked as paid successfully", response)
+        );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFees(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteFees(
+            @PathVariable Long id) {
+
         feesService.deleteFees(id);
-        return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Fees deleted successfully", null)
+        );
     }
 
-    // ✅ Fixed — Integer changed to String
     @GetMapping("/standards")
-    public ResponseEntity<List<String>> getStandards() {
+    public ResponseEntity<ApiResponse<List<String>>> getStandards() {
+
         List<String> standards = Arrays.stream(Standard.values())
                 .map(Standard::getValue)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(standards);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Standards fetched successfully", standards)
+        );
     }
 }

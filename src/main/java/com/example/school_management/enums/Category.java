@@ -1,9 +1,5 @@
 package com.example.school_management.enums;
 
-/**
- * Represents the social/caste category of a student.
- * Used for admission eligibility, reservations, and government reporting.
- */
 public enum Category {
 
     GENERAL("General"),

@@ -9,36 +9,26 @@ import java.util.List;
 
 public interface ComplaintService {
 
-    // Create complaint
+
     ComplaintResponseDto createComplaint(ComplaintRequestDto request);
 
-    // Get all complaints
     List<ComplaintResponseDto> getAllComplaints();
 
-    // Get by ID
     ComplaintResponseDto getComplaintById(Long id);
 
-    // Get by student
     List<ComplaintResponseDto> getComplaintsByStudent(Long studentId);
 
-    // Get by teacher
     List<ComplaintResponseDto> getComplaintsByTeacher(Long teacherId);
 
-    // Get by status
     List<ComplaintResponseDto> getComplaintsByStatus(ComplaintStatus status);
 
-    // Get by priority
     List<ComplaintResponseDto> getComplaintsByPriority(Priority priority);
 
-    // Get by category
     List<ComplaintResponseDto> getComplaintsByCategory(ComplaintCategory category);
 
-    // Update status
     ComplaintResponseDto updateStatus(Long id, ComplaintStatus status);
 
-    // Resolve complaint
     ComplaintResponseDto resolveComplaint(Long id, String resolutionComment, String resolvedBy);
 
-    // Delete complaint
     void deleteComplaint(Long id);
 }

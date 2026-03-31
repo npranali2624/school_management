@@ -1,5 +1,6 @@
 package com.example.school_management.controller;
 
+import com.example.school_management.dto.ApiResponse;
 import com.example.school_management.dto.StudentRequestDto;
 import com.example.school_management.dto.StudentResponseDto;
 import com.example.school_management.service.StudentService;
@@ -18,69 +19,93 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // ── POST /api/students ───────────────────────
-    // Admit a new student
+    // Create Student
     @PostMapping
-    public ResponseEntity<StudentResponseDto> admitStudent(
+    public ResponseEntity<ApiResponse<StudentResponseDto>> admitStudent(
             @Valid @RequestBody StudentRequestDto request) {
 
         StudentResponseDto response = studentService.admitStudent(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Student admitted successfully", response));
     }
 
-    // ── GET /api/students ────────────────────────
-    // Get all students
+    //Get All Students
     @GetMapping
-    public ResponseEntity<List<StudentResponseDto>> getAllStudents() {
-        return ResponseEntity.ok(studentService.getAllStudents());
+    public ResponseEntity<ApiResponse<List<StudentResponseDto>>> getAllStudents() {
+
+        List<StudentResponseDto> students = studentService.getAllStudents();
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Students fetched successfully", students)
+        );
     }
 
-    // ── GET /api/students/{id} ───────────────────
-    // Get student by ID
+    //Get Student by ID
     @GetMapping("/{id}")
-    public ResponseEntity<StudentResponseDto> getStudentById(
+    public ResponseEntity<ApiResponse<StudentResponseDto>> getStudentById(
             @PathVariable Long id) {
 
-        return ResponseEntity.ok(studentService.getStudentById(id));
+        StudentResponseDto student = studentService.getStudentById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Student fetched successfully", student)
+        );
     }
 
-    // ── GET /api/students/roll/{rollNumber} ──────
-    // Get student by roll number
+    //Get Student by Roll Number
     @GetMapping("/roll/{rollNumber}")
-    public ResponseEntity<StudentResponseDto> getStudentByRollNumber(
+    public ResponseEntity<ApiResponse<StudentResponseDto>> getStudentByRollNumber(
             @PathVariable Integer rollNumber) {
 
-        return ResponseEntity.ok(studentService.getStudentByRollNumber(rollNumber));
+        StudentResponseDto student = studentService.getStudentByRollNumber(rollNumber);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Student fetched successfully", student)
+        );
     }
 
-    // ── PUT /api/students/{id} ───────────────────
-    // Update student details
+    //Update Student
     @PutMapping("/{id}")
-    public ResponseEntity<StudentResponseDto> updateStudent(
+    public ResponseEntity<ApiResponse<StudentResponseDto>> updateStudent(
             @PathVariable Long id,
             @Valid @RequestBody StudentRequestDto request) {
 
-        return ResponseEntity.ok(studentService.updateStudent(id, request));
+        StudentResponseDto updated = studentService.updateStudent(id, request);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Student updated successfully", updated)
+        );
     }
 
-    // ── PATCH /api/students/{id}/status ─────────
-    // Toggle active/inactive status
+    //Toggle Status
     @PatchMapping("/{id}/status")
-    public ResponseEntity<String> toggleStatus(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> toggleStatus(@PathVariable Long id) {
+
         studentService.toggleStudentStatus(id);
-        return ResponseEntity.ok("Student status updated successfully");
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Student status updated successfully", null)
+        );
     }
 
-    // ── DELETE /api/students/{id} ────────────────
-    // Permanently delete student
+    //Delete Student
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> deleteStudent(@PathVariable Long id) {
+
         studentService.deleteStudent(id);
-        return ResponseEntity.ok("Student deleted successfully");
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Student deleted successfully", null)
+        );
     }
 
+    // Profile API
     @GetMapping("/profile")
-    public ResponseEntity<String> profile() {
-        return ResponseEntity.ok("Student Profile");
+    public ResponseEntity<ApiResponse<String>> profile() {
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Student profile fetched", "Student Profile")
+        );
     }
 }

@@ -19,8 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Student extends BaseEntity {
 
-    // SECTION 1 — Personal Information
-
     @NotBlank(message = ValidationMessages.FIRST_NAME_REQUIRED)
     @Size(max = 50, message = ValidationMessages.FIRST_NAME_MAX)
     @Column(name = "first_name", length = 50, nullable = false)
@@ -75,13 +73,9 @@ public class Student extends BaseEntity {
     @Column(name = "roll_number", unique = true)
     private Integer rollNumber;
 
-    // SECTION 2 — Parent / Guardian Information
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_id")
     private Parent parent;
-
-    // SECTION 3 — Academic Information
 
     @Size(max = 150, message = ValidationMessages.PREVIOUS_SCHOOL_MAX)
     @Column(name = "previous_school", length = 150)
@@ -92,25 +86,20 @@ public class Student extends BaseEntity {
     @Column(name = "previous_percentage")
     private Double previousPercentage;
 
-    // SECTION 4 — Document URLs
-
-    @NotBlank(message = ValidationMessages.BIRTH_CERTIFICATE_REQUIRED)
     @Size(max = 200)
-    @Column(name = "birth_certificate_url", length = 200, nullable = false)
+    @Column(name = "birth_certificate_url", length = 200)
     private String birthCertificateUrl;
 
-    @NotBlank(message = ValidationMessages.AADHAR_PHOTO_REQUIRED)
     @Size(max = 200)
-    @Column(name = "aadhar_photo_url", length = 200, nullable = false)
+    @Column(name = "aadhar_photo_url", length = 200)
     private String aadharPhotoUrl;
 
     @Size(max = 200)
     @Column(name = "previous_marksheet_url", length = 200)
     private String previousMarksheetUrl;
 
-    @NotBlank(message = ValidationMessages.PASSPORT_PHOTO_REQUIRED)
     @Size(max = 200)
-    @Column(name = "passport_photo_url", length = 200, nullable = false)
+    @Column(name = "passport_photo_url", length = 200)
     private String passportPhotoUrl;
 
     @Size(max = 200)
@@ -125,17 +114,10 @@ public class Student extends BaseEntity {
     @Column(name = "income_certificate_url", length = 200)
     private String incomeCertificateUrl;
 
-    // SECTION 5 — System Fields
-
     @Builder.Default
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 
-    // ─────────────────────────────────────────
-    // SECTION 6 — Complaint Mapping (NEW ✅)
-    // ─────────────────────────────────────────
-
-    // One Student → Many Complaints
     @JsonIgnore
     @Builder.Default
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

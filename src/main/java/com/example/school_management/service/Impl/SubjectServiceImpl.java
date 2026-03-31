@@ -18,7 +18,7 @@ import java.util.List;
 public class SubjectServiceImpl implements SubjectService {
 
     private final SubjectRepository subjectRepository;
-    private final TeacherRepo teacherRepository; // ← Added
+    private final TeacherRepo teacherRepository;
 
     private Subject mapToEntity(SubjectRequestDto request) {
         Subject subject = new Subject();
@@ -34,7 +34,7 @@ public class SubjectServiceImpl implements SubjectService {
         subject.setTotalMarks(request.getTotalMarks());
         subject.setPassingMarks(request.getPassingMarks());
 
-        // ✅ Fetch Teacher from DB using ID
+
         if (request.getSubjectTeacherId() != null) {
             Teacher teacher = teacherRepository.findById(request.getSubjectTeacherId())
                     .orElseThrow(() -> new RuntimeException(
@@ -66,7 +66,6 @@ public class SubjectServiceImpl implements SubjectService {
         response.setTotalMarks(subject.getTotalMarks());
         response.setPassingMarks(subject.getPassingMarks());
 
-        // ✅ Set teacher details in response
         if (subject.getSubjectTeacher() != null) {
             response.setSubjectTeacherId(subject.getSubjectTeacher().getId());
             response.setSubjectTeacherName(

@@ -85,7 +85,6 @@ public class AssignmentServiceImpl implements AssignmentService {
         switch (assignment.getStatus()) {
             case DRAFT:
             case PUBLISHED:
-                // allowed to update
                 break;
             case CLOSED:
                 throw new IllegalStateException("CLOSED assignment cannot be updated.");

@@ -2,7 +2,7 @@ package com.example.school_management.enums;
 
 public enum DegreeType {
 
-    // Teacher Degrees
+
     B_ED("Bachelor of Education"),
     M_ED("Master of Education"),
     B_A("Bachelor of Arts"),
@@ -18,7 +18,6 @@ public enum DegreeType {
     TTC("Teacher Training Certificate"),
     CTET("Central Teacher Eligibility Test Certified"),
 
-    // Finance Staff Degrees
     B_COM_FINANCE("Bachelor of Commerce - Finance"),
     M_COM_FINANCE("Master of Commerce - Finance"),
     BBA("Bachelor of Business Administration"),
@@ -29,7 +28,6 @@ public enum DegreeType {
     B_SC_ACCOUNTING("Bachelor of Science in Accounting"),
     PGDM("Post Graduate Diploma in Management"),
 
-    // Common / Other
     OTHER("Other - Please specify below");
 
     private final String displayName;

@@ -11,7 +11,6 @@ public class ReceiptGenerator {
         return mode.name() + "-REC-" + uuid;
     }
 
-    // ✅ Added
     public static String generateReferenceNumber(ModeOfPayment mode) {
         return mode.name() + "-REF-" + System.currentTimeMillis();
     }

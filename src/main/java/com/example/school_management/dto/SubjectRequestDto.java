@@ -29,7 +29,7 @@ public class SubjectRequestDto {
     @NotNull(message = ValidationMessages.SUBJECT_TYPE_REQUIRED)
     private SubjectType subjectType;
 
-    private Long subjectTeacherId;   // ← Changed from String to Long ✅
+    private Long subjectTeacherId;
 
     @Min(value = 0, message = ValidationMessages.THEORY_MARKS_MIN)
     private Integer theoryMarks;

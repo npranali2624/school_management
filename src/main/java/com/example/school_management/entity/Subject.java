@@ -40,8 +40,6 @@ public class Subject {
     @Column(name = "subject_type", nullable = false)
     private SubjectType subjectType;
 
-
-    //
     @ManyToOne
     @JoinColumn(name = "subject_teacher_id")
     private Teacher subjectTeacher;

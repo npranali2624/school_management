@@ -1,10 +1,12 @@
 package com.example.school_management.dto;
 
 import com.example.school_management.constants.ValidationMessages;
+import com.example.school_management.entity.Subject;
 import com.example.school_management.enums.DegreeType;
 import com.example.school_management.enums.Gender;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+
 import java.time.LocalDate;
 
 @Data
@@ -45,9 +47,12 @@ public class TeacherRequestDto {
     @NotNull(message = ValidationMessages.DOB_REQUIRED)
     private LocalDate dob;
 
-    @NotBlank(message = ValidationMessages.STREET_REQUIRED)
-    @Size(max = 30)
-    private String street;
+    @NotBlank(message = ValidationMessages.ADDRESS_LINE1_REQUIRED)
+    @Size(max = 100)
+    private String addressLine1;
+
+    @Size(max = 100)
+    private String addressLine2;
 
     @NotBlank(message = ValidationMessages.CITY_REQUIRED)
     @Size(max = 30)
@@ -57,7 +62,10 @@ public class TeacherRequestDto {
     @Size(max = 30)
     private String state;
 
-    // Replace these 4 lines
+    @NotBlank(message = ValidationMessages.PINCODE_REQUIRED)
+    @Pattern(regexp = "^[0-9]{6}$", message = "Pincode must be 6 digits")
+    private String pincode;
+
     @NotBlank(message = ValidationMessages.AADHAR_REQUIRED)
     @Pattern(regexp = "^[0-9]{12}$", message = ValidationMessages.AADHAR_PATTERN)
 
@@ -78,34 +86,38 @@ public class TeacherRequestDto {
     @Pattern(regexp = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$", message = ValidationMessages.PAN_PATTERN)
     private String panNo;
 
-    @NotBlank(message = ValidationMessages.AADHAAR_PHOTO_REQUIRED)
     private String aadharPhoto;
 
-    @NotBlank(message = ValidationMessages.PAN_PHOTO_REQUIRED)
+
     private String panPhoto;
 
-    @NotBlank(message = ValidationMessages.DEGREE_CERTIFICATE_REQUIRED)
+
     private String degreeCertificate;
 
-    @NotBlank(message = ValidationMessages.RESIGNATION_LETTER_REQUIRED)
+
     private String resignationLetter;
 
-    @NotBlank(message = ValidationMessages.RESUME_REQUIRED)
+
     private String resume;
 
     @NotNull(message = ValidationMessages.EXPERIENCE_REQUIRED)
     @PositiveOrZero(message = ValidationMessages.EXPERIENCE_POSITIVE)
     private Integer yearsOfExperience;
 
-    // ---------- Teacher-Specific Fields ----------
 
     @NotBlank(message = ValidationMessages.SUBJECT_REQUIRED)
     @Size(max = 50)
-    private String subject;
+    private Subject subject;
 
     @NotBlank(message = ValidationMessages.ASSIGNED_CLASS_REQUIRED)
     @Size(max = 20)
-    private String assignedClass;
+    private Class assignedClass;
+
+    @NotNull(message = ValidationMessages.SUBJECT_REQUIRED)
+    private Long subjectId;
+
+    @NotNull(message = ValidationMessages.SPECIALIZATION_REQUIRED)
+    private Long specializationId;
 
     @NotBlank(message = ValidationMessages.PREVIOUS_SCHOOL_REQUIRED)
     @Size(max = 100)

@@ -47,7 +47,6 @@ public class Class {
     @Column(name = "class_name", nullable = false)
     private String className;
 
-    // One class has ONE class teacher
     @OneToOne
     @JoinColumn(name = "class_teacher_id")
     private Teacher classTeacher;

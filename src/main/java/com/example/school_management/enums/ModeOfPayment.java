@@ -13,7 +13,7 @@ public enum ModeOfPayment
         if (mode == null) throw new IllegalArgumentException("Payment mode cannot be null");
 
         switch (mode.toUpperCase()) {
-            case "CHECK": return CHEQUE;  // map incorrect input to correct enum
+            case "CHECK": return CHEQUE;
             default: return ModeOfPayment.valueOf(mode.toUpperCase());
         }
     }

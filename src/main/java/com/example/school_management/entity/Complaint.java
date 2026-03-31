@@ -37,7 +37,7 @@ public class Complaint extends BaseEntity {
     @Builder.Default
     private Priority priority = Priority.MEDIUM;
 
-    @Column(name = "supported_media", length = 500)  // ← DB column name updated
+    @Column(name = "supported_media", length = 500)
     private String supportedMedia;
 
     @Column(name = "resolution_comment", length = 1000)

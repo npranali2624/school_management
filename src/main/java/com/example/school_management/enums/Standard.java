@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Standard {
 
-    // ── KG Standards ────────────────────────────
     NURSERY("Nursery"),
     JUNIOR_KG("Junior KG"),
     SENIOR_KG("Senior KG"),
 
-    // ── Numeric Standards ────────────────────────
     STD_1("1"),
     STD_2("2"),
     STD_3("3"),

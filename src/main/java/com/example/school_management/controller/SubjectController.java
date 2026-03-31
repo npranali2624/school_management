@@ -1,5 +1,6 @@
 package com.example.school_management.controller;
 
+import com.example.school_management.dto.ApiResponse;
 import com.example.school_management.dto.SubjectRequestDto;
 import com.example.school_management.dto.SubjectResponseDto;
 import com.example.school_management.service.SubjectService;
@@ -18,40 +19,58 @@ public class SubjectController {
 
     private final SubjectService subjectService;
 
-    // POST /api/subjects
     @PostMapping
-    public ResponseEntity<SubjectResponseDto> createSubject(
+    public ResponseEntity<ApiResponse<SubjectResponseDto>> createSubject(
             @Valid @RequestBody SubjectRequestDto request) {
+
         SubjectResponseDto response = subjectService.createSubject(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.ok("Subject created successfully", response));
     }
 
-    // GET /api/subjects
     @GetMapping
-    public ResponseEntity<List<SubjectResponseDto>> getAllSubjects() {
-        return ResponseEntity.ok(subjectService.getAllSubjects());
+    public ResponseEntity<ApiResponse<List<SubjectResponseDto>>> getAllSubjects() {
+
+        List<SubjectResponseDto> response = subjectService.getAllSubjects();
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Subjects fetched successfully", response)
+        );
     }
 
-    // GET /api/subjects/101
     @GetMapping("/{subjectCode}")
-    public ResponseEntity<SubjectResponseDto> getSubjectByCode(
+    public ResponseEntity<ApiResponse<SubjectResponseDto>> getSubjectByCode(
             @PathVariable Integer subjectCode) {
-        return ResponseEntity.ok(subjectService.getSubjectByCode(subjectCode));
+
+        SubjectResponseDto response = subjectService.getSubjectByCode(subjectCode);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Subject fetched successfully", response)
+        );
     }
 
-    // PUT /api/subjects/101
     @PutMapping("/{subjectCode}")
-    public ResponseEntity<SubjectResponseDto> updateSubject(
+    public ResponseEntity<ApiResponse<SubjectResponseDto>> updateSubject(
             @PathVariable Integer subjectCode,
             @Valid @RequestBody SubjectRequestDto request) {
-        return ResponseEntity.ok(subjectService.updateSubject(subjectCode, request));
+
+        SubjectResponseDto response =
+                subjectService.updateSubject(subjectCode, request);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Subject updated successfully", response)
+        );
     }
 
-    // DELETE /api/subjects/101
     @DeleteMapping("/{subjectCode}")
-    public ResponseEntity<String> deleteSubject(
+    public ResponseEntity<ApiResponse<String>> deleteSubject(
             @PathVariable Integer subjectCode) {
+
         subjectService.deleteSubject(subjectCode);
-        return ResponseEntity.ok("Subject deleted successfully");
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Subject deleted successfully", null)
+        );
     }
 }
