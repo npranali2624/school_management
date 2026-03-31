@@ -1,0 +1,36 @@
+package com.example.school_management.dto;
+
+import com.example.school_management.enums.ComplaintCategory;
+import com.example.school_management.enums.ComplaintStatus;
+import com.example.school_management.enums.Priority;
+import lombok.Builder;
+import lombok.Data;
+import java.time.Instant;
+
+@Data
+@Builder
+public class ComplaintResponseDto {
+
+    private Long id;
+    private String title;
+    private String description;
+    private ComplaintCategory category;
+    private ComplaintStatus status;
+    private Priority priority;
+    private String supportedMedia;
+    private String resolutionComment;
+    private String resolvedBy;
+    private Instant resolvedAt;
+
+    // Student info
+    private Long studentId;
+    private String studentName;
+
+    // Teacher info
+    private Long teacherId;
+    private String teacherName;
+
+    // Audit
+    private Instant createdAt;
+    private Instant updatedAt;
+}

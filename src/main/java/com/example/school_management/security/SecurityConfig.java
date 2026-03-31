@@ -32,6 +32,8 @@ public class SecurityConfig
                         .requestMatchers("/api/payments/**").permitAll()
                         .requestMatchers("/api/students/**").permitAll()
                         .requestMatchers("/api/classes/**").permitAll()
+                        .requestMatchers("/api/complaints/**").permitAll()
+                        .requestMatchers("/api/assignments/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/subjects/**").permitAll()
                         .requestMatchers("/teachers/**").permitAll()

@@ -2,11 +2,14 @@ package com.example.school_management.entity;
 
 import com.example.school_management.constants.ValidationMessages;
 import com.example.school_management.enums.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "students")
@@ -127,4 +130,14 @@ public class Student extends BaseEntity {
     @Builder.Default
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
+
+    // ─────────────────────────────────────────
+    // SECTION 6 — Complaint Mapping (NEW ✅)
+    // ─────────────────────────────────────────
+
+    // One Student → Many Complaints
+    @JsonIgnore
+    @Builder.Default
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Complaint> complaints = new ArrayList<>();
 }

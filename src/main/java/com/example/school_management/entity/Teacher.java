@@ -1,5 +1,6 @@
 package com.example.school_management.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -36,4 +37,11 @@ public class Teacher extends Employee {
     @Builder.Default
     @OneToMany(mappedBy = "subjectTeacher")
     private List<Subject> subjects = new ArrayList<>();
+
+
+    // One Teacher → Many Complaints
+    @JsonIgnore
+    @Builder.Default
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Complaint> complaints = new ArrayList<>();
 }

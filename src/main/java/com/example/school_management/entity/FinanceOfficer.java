@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @NoArgsConstructor
-public class Finance extends Employee {
+public class FinanceOfficer extends Employee {
 
     @Size(max = 100)
     @Column(name = "previous_org", length = 100)

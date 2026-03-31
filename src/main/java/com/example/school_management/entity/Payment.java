@@ -71,7 +71,7 @@ public class Payment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "collected_by_id", nullable = true)
-    private Finance collectedBy;
+    private FinanceOfficer collectedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fees_id", nullable = true)
