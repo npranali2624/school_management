@@ -29,6 +29,8 @@ public class TeacherRequestDto {
     @Size(max = 30)
     private String email;
 
+    private String aadharNo;
+
     @NotBlank(message = ValidationMessages.PASSWORD_REQUIRED)
     @Size(min = 8, max = 20, message = ValidationMessages.PASSWORD_SIZE)
     @Pattern(
