@@ -19,7 +19,6 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // Create Student
     @PostMapping
     public ResponseEntity<ApiResponse<StudentResponseDto>> admitStudent(
             @Valid @RequestBody StudentRequestDto request) {
@@ -30,7 +29,6 @@ public class StudentController {
                 .body(ApiResponse.ok("Student admitted successfully", response));
     }
 
-    //Get All Students
     @GetMapping
     public ResponseEntity<ApiResponse<List<StudentResponseDto>>> getAllStudents() {
 
@@ -41,7 +39,6 @@ public class StudentController {
         );
     }
 
-    //Get Student by ID
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<StudentResponseDto>> getStudentById(
             @PathVariable Long id) {
@@ -53,7 +50,6 @@ public class StudentController {
         );
     }
 
-    //Get Student by Roll Number
     @GetMapping("/roll/{rollNumber}")
     public ResponseEntity<ApiResponse<StudentResponseDto>> getStudentByRollNumber(
             @PathVariable Integer rollNumber) {
@@ -65,7 +61,6 @@ public class StudentController {
         );
     }
 
-    //Update Student
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<StudentResponseDto>> updateStudent(
             @PathVariable Long id,
@@ -78,7 +73,6 @@ public class StudentController {
         );
     }
 
-    //Toggle Status
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<String>> toggleStatus(@PathVariable Long id) {
 
@@ -89,7 +83,6 @@ public class StudentController {
         );
     }
 
-    //Delete Student
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteStudent(@PathVariable Long id) {
 
@@ -100,12 +93,18 @@ public class StudentController {
         );
     }
 
-    // Profile API
     @GetMapping("/profile")
     public ResponseEntity<ApiResponse<String>> profile() {
 
         return ResponseEntity.ok(
                 ApiResponse.ok("Student profile fetched", "Student Profile")
+        );
+    }
+    @GetMapping("/dashboard")
+    public ResponseEntity<ApiResponse<String>> studentDashboard() {
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Dashboard fetched", "Student & Parent Dashboard")
         );
     }
 }

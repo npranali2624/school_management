@@ -6,10 +6,15 @@ import com.example.school_management.security.CustomUserDetailsService;
 import com.example.school_management.security.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,19 +30,41 @@ public class AuthController {
     private PasswordEncoder encoder;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> login(
-            @Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
 
-        UserDetails user = service.loadUserByUsername(request.getEmail());
 
-        if (!encoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+        UserDetails user;
+        try {
+            user = service.loadUserByUsername(request.getEmail());
+        } catch (UsernameNotFoundException ex) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("Invalid email or password"));
         }
 
-        String token = jwtUtil.generateToken(request.getEmail());
+
+        if (!encoder.matches(request.getPassword(), user.getPassword())) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("Invalid email or password"));
+        }
+
+
+        String role = user.getAuthorities().stream()
+                .findFirst()
+                .map(GrantedAuthority::getAuthority)
+                .orElse("UNKNOWN");
+
+
+        String token = jwtUtil.generateToken(request.getEmail(), role);
+
 
         return ResponseEntity.ok(
-                ApiResponse.ok("Login successful", token)
+                ApiResponse.ok("Login successful", Map.of(
+                        "token", token,
+                        "role",  role,
+                        "email", user.getUsername()
+                ))
         );
     }
 }
