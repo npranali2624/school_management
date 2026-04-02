@@ -68,6 +68,16 @@ public class Student extends BaseEntity {
     @Column(name = "category", length = 30, nullable = false)
     private Category category;
 
+    @NotNull(message = ValidationMessages.STANDARD_REQUIRED)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "standard", length = 10, nullable = false)
+    private Standard standard;
+
+    @NotNull(message = ValidationMessages.DIVISION_REQUIRED)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "division", length = 5, nullable = false)
+    private Division division;
+
     @NotNull(message = ValidationMessages.ROLL_NUMBER_REQUIRED)
     @Min(value = 1, message = ValidationMessages.ROLL_NUMBER_MIN)
     @Column(name = "roll_number", unique = true)

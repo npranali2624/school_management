@@ -44,7 +44,6 @@ public class FinanceOfficerServiceImpl implements FinanceOfficerService {
         return mapToDto(findById(id));
     }
 
-
     @Override
     public FinanceOfficerResponseDto updateFinanceOfficer(Long id, FinanceOfficerRequestDto dto) {
         FinanceOfficer officer = findById(id);
@@ -70,6 +69,13 @@ public class FinanceOfficerServiceImpl implements FinanceOfficerService {
         officer.setPreviousOrg(dto.getPreviousOrg());
 
 
+        officer.setAadharPhotourl(dto.getAadharPhotourl());
+        officer.setPanPhotourl(dto.getPanPhotourl());
+        officer.setDegreeCertificateurl(dto.getDegreeCertificateurl());
+        officer.setResignationLetterurl(dto.getResignationLetterurl());
+        officer.setResumeurl(dto.getResumeurl());
+
+
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             officer.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
@@ -84,7 +90,6 @@ public class FinanceOfficerServiceImpl implements FinanceOfficerService {
         officer.setActive(!officer.isActive());
         financeOfficerRepository.save(officer);
     }
-
 
     @Override
     public void deleteFinanceOfficer(Long id) {
@@ -118,6 +123,12 @@ public class FinanceOfficerServiceImpl implements FinanceOfficerService {
                 .panNo(dto.getPanNo())
                 .yearsOfExperience(dto.getYearsOfExperience())
                 .previousOrg(dto.getPreviousOrg())
+
+                .aadharPhotourl(dto.getAadharPhotourl())
+                .panPhotourl(dto.getPanPhotourl())
+                .degreeCertificateurl(dto.getDegreeCertificateurl())
+                .resignationLetterurl(dto.getResignationLetterurl())
+                .resumeurl(dto.getResumeurl())
                 .build();
     }
 
@@ -143,6 +154,11 @@ public class FinanceOfficerServiceImpl implements FinanceOfficerService {
         dto.setPanNo(officer.getPanNo());
         dto.setYearsOfExperience(officer.getYearsOfExperience());
         dto.setPreviousOrg(officer.getPreviousOrg());
+        dto.setAadharPhotourl(officer.getAadharPhotourl());
+        dto.setPanPhotourl(officer.getPanPhotourl());
+        dto.setDegreeCertificateurl(officer.getDegreeCertificateurl());
+        dto.setResignationLetterurl(officer.getResignationLetterurl());
+        dto.setResumeurl(officer.getResumeurl());
         dto.setActive(officer.isActive());
         dto.setRole(officer.getRole().name());
         return dto;

@@ -27,26 +27,27 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain)
             throws ServletException, IOException {
+
         try {
             String header = request.getHeader("Authorization");
 
             if (header != null && header.startsWith("Bearer ")) {
 
-                String token  = header.substring(7);
-                String email  = jwtUtil.extractEmail(token);
+                String token = header.substring(7);
+                String username = jwtUtil.extractUsername(token);
+                String role = jwtUtil.extractRole(token);
 
-                String role   = jwtUtil.extractRole(token);
-
-                if (email != null && role != null &&
+                if (username != null && role != null &&
                         SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                    var userDetails = service.loadUserByUsername(email);
+                    var userDetails = service.loadUserByUsername(username);
 
+                    // ✅ FIXED: add ROLE_ prefix
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
                                     null,
-                                    List.of(new SimpleGrantedAuthority(role))
+                                    List.of(new SimpleGrantedAuthority( "ROLE_" +role))
                             );
 
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

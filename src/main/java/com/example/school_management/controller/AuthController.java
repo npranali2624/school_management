@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController
@@ -21,9 +20,7 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
+    private JwtUtil jwtUtil;@Autowired
     private CustomUserDetailsService service;
 
     @Autowired
@@ -31,39 +28,36 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
-
-
         UserDetails user;
         try {
-            user = service.loadUserByUsername(request.getEmail());
+            user = service.loadUserByUsername(request.getIdentifier());
         } catch (UsernameNotFoundException ex) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.error("Invalid email or password"));
+                    .body(ApiResponse.error("Invalid credentials"));
         }
-
 
         if (!encoder.matches(request.getPassword(), user.getPassword())) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.error("Invalid email or password"));
+                    .body(ApiResponse.error("Invalid credentials"));
         }
-
 
         String role = user.getAuthorities().stream()
                 .findFirst()
                 .map(GrantedAuthority::getAuthority)
                 .orElse("UNKNOWN");
 
+        //  REMOVE ROLE_ prefix
+        role = role.replace("ROLE_", "");
 
-        String token = jwtUtil.generateToken(request.getEmail(), role);
-
+        String token = jwtUtil.generateToken(request.getIdentifier(), role);
 
         return ResponseEntity.ok(
                 ApiResponse.ok("Login successful", Map.of(
-                        "token", token,
-                        "role",  role,
-                        "email", user.getUsername()
+                        "token",      token,
+                        "role",       role,
+                        "identifier", user.getUsername()
                 ))
         );
     }

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<?>> createTeacher(
             @Valid @RequestBody Teacher teacher) {
         try {
@@ -28,77 +30,66 @@ public class TeacherController {
             );
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.badRequest().body(
-                    ApiResponse.error("Something went wrong while saving: "
+                    ApiResponse.error("Something went wrong: "
                             + e.getMostSpecificCause().getMessage())
             );
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> getTeacherById(
-            @PathVariable Long id) {
-        try {
-            Teacher teacher = teacherService.getTeacherById(id);
-            return ResponseEntity.ok(
-                    ApiResponse.ok("Teacher fetched successfully", teacher)
-            );
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(
-                    ApiResponse.error(e.getMessage())
-            );
-        }
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public ResponseEntity<ApiResponse<?>> getTeacherById(@PathVariable Long id) {
+        Teacher teacher = teacherService.getTeacherById(id);
+        return ResponseEntity.ok(ApiResponse.ok("Fetched", teacher));
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<List<Teacher>>> getAllTeachers() {
-
-        List<Teacher> teachers = teacherService.getAllTeachers();
-
         return ResponseEntity.ok(
-                ApiResponse.ok("Teachers fetched successfully", teachers)
+                ApiResponse.ok("Fetched", teacherService.getAllTeachers())
         );
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<?>> updateTeacher(
             @PathVariable Long id,
-            @Valid @RequestBody Teacher teacher) {
-        try {
-            Teacher updated = teacherService.updateTeacher(id, teacher);
-            return ResponseEntity.ok(
-                    ApiResponse.ok("Teacher updated successfully", updated)
-            );
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.error("Something went wrong while updating: "
-                            + e.getMostSpecificCause().getMessage())
-            );
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(
-                    ApiResponse.error(e.getMessage())
-            );
-        }
+            @RequestBody Teacher teacher) {
+        return ResponseEntity.ok(
+                ApiResponse.ok("Updated",
+                        teacherService.updateTeacher(id, teacher))
+        );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> deleteTeacher(
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<?>> deleteTeacher(@PathVariable Long id) {
+        teacherService.deleteTeacher(id);
+        return ResponseEntity.ok(ApiResponse.ok("Deleted", null));
+    }
+
+    @GetMapping("/dashboard")
+    @PreAuthorize("hasRole('TEACHER')")
+    public ResponseEntity<ApiResponse<String>> teacherDashboard() {
+        return ResponseEntity.ok(
+                ApiResponse.ok("Dashboard", "Teacher Dashboard")
+        );
+    }
+
+    @GetMapping("/{id}/degree-type")
+    public ResponseEntity<ApiResponse<String>> getDegreeTypeByTeacherId(
             @PathVariable Long id) {
         try {
-            teacherService.deleteTeacher(id);
+            Teacher teacher = teacherService.getTeacherById(id);
             return ResponseEntity.ok(
-                    ApiResponse.ok("Teacher deleted successfully", null)
+                    ApiResponse.ok("Degree type fetched successfully",
+                            teacher.getDegreeType() != null ? teacher.getDegreeType().name() : null)
             );
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(
                     ApiResponse.error(e.getMessage())
             );
         }
-    }
-
-    @GetMapping("/dashboard")
-    public ResponseEntity<ApiResponse<String>> teacherDashboard() {
-        return ResponseEntity.ok(
-                ApiResponse.ok("Dashboard fetched", "Teacher Dashboard")
-        );
     }
 }

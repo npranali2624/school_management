@@ -30,5 +30,11 @@ public class FinanceOfficerResponseDto {
     private Integer yearsOfExperience;
     private String previousOrg;
     private boolean isActive;
+    private String aadharPhotourl;
+    private String panPhotourl;
+    private String degreeCertificateurl;
+    private String resignationLetterurl;
+    private String resumeurl;
+
     private String role;
 }

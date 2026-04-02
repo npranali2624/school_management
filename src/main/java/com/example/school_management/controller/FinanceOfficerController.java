@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize; // ✅ ADDED
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,16 +20,18 @@ public class FinanceOfficerController {
 
     private final FinanceOfficerService financeOfficerService;
 
-
+    // 🔐 FINANCE only
     @GetMapping("/dashboard")
+    @PreAuthorize("hasRole('FINANCE')")
     public ResponseEntity<ApiResponse<String>> financeDashboard() {
         return ResponseEntity.ok(
                 ApiResponse.ok("Dashboard fetched", "Finance Dashboard")
         );
     }
 
-
+    // 🔐 ADMIN only (create finance officer)
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<FinanceOfficerResponseDto>> createFinanceOfficer(
             @Valid @RequestBody FinanceOfficerRequestDto request) {
 
@@ -38,8 +41,9 @@ public class FinanceOfficerController {
                 .body(ApiResponse.ok("Finance Officer created successfully", response));
     }
 
-
+    // 🔐 ADMIN + FINANCE
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','FINANCE')")
     public ResponseEntity<ApiResponse<List<FinanceOfficerResponseDto>>> getAllFinanceOfficers() {
 
         List<FinanceOfficerResponseDto> officers = financeOfficerService.getAllFinanceOfficers();
@@ -49,7 +53,9 @@ public class FinanceOfficerController {
         );
     }
 
+    // 🔐 ADMIN + FINANCE
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','FINANCE')")
     public ResponseEntity<ApiResponse<FinanceOfficerResponseDto>> getFinanceOfficerById(
             @PathVariable Long id) {
 
@@ -60,8 +66,9 @@ public class FinanceOfficerController {
         );
     }
 
-
+    // 🔐 ADMIN only
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<FinanceOfficerResponseDto>> updateFinanceOfficer(
             @PathVariable Long id,
             @Valid @RequestBody FinanceOfficerRequestDto request) {
@@ -73,8 +80,9 @@ public class FinanceOfficerController {
         );
     }
 
-
+    // 🔐 ADMIN only
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> toggleStatus(@PathVariable Long id) {
 
         financeOfficerService.toggleStatus(id);
@@ -84,14 +92,31 @@ public class FinanceOfficerController {
         );
     }
 
-
+    // 🔐 ADMIN only
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteFinanceOfficer(@PathVariable Long id) {
 
         financeOfficerService.deleteFinanceOfficer(id);
 
         return ResponseEntity.ok(
                 ApiResponse.ok("Finance Officer deleted successfully", null)
+        );
+    }
+
+    // ✅ 🔐 ADMIN + FINANCE (ADDED MISSING API)
+    @GetMapping("/{id}/degree-type")
+    @PreAuthorize("hasAnyRole('ADMIN','FINANCE')")
+    public ResponseEntity<ApiResponse<String>> getDegreeTypeByFinanceOfficerId(
+            @PathVariable Long id) {
+
+        FinanceOfficerResponseDto officer = financeOfficerService.getFinanceOfficerById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok(
+                        "Degree type fetched successfully",
+                        officer.getDegreeType() != null ? officer.getDegreeType().name() : null
+                )
         );
     }
 }

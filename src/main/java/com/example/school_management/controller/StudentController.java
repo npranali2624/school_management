@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize; // ✅ ADDED
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,9 @@ public class StudentController {
 
     private final StudentService studentService;
 
+    // 🔐 ADMIN only (admit student)
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<StudentResponseDto>> admitStudent(
             @Valid @RequestBody StudentRequestDto request) {
 
@@ -29,7 +32,9 @@ public class StudentController {
                 .body(ApiResponse.ok("Student admitted successfully", response));
     }
 
+    // 🔐 ADMIN + TEACHER
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<List<StudentResponseDto>>> getAllStudents() {
 
         List<StudentResponseDto> students = studentService.getAllStudents();
@@ -39,7 +44,9 @@ public class StudentController {
         );
     }
 
+    // 🔐 ADMIN + TEACHER
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<StudentResponseDto>> getStudentById(
             @PathVariable Long id) {
 
@@ -50,7 +57,9 @@ public class StudentController {
         );
     }
 
+    // 🔐 ADMIN + TEACHER
     @GetMapping("/roll/{rollNumber}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<StudentResponseDto>> getStudentByRollNumber(
             @PathVariable Integer rollNumber) {
 
@@ -61,7 +70,9 @@ public class StudentController {
         );
     }
 
+    // 🔐 ADMIN only
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<StudentResponseDto>> updateStudent(
             @PathVariable Long id,
             @Valid @RequestBody StudentRequestDto request) {
@@ -73,7 +84,9 @@ public class StudentController {
         );
     }
 
+    // 🔐 ADMIN only
     @PatchMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> toggleStatus(@PathVariable Long id) {
 
         studentService.toggleStudentStatus(id);
@@ -83,7 +96,9 @@ public class StudentController {
         );
     }
 
+    // 🔐 ADMIN only
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteStudent(@PathVariable Long id) {
 
         studentService.deleteStudent(id);
@@ -93,18 +108,93 @@ public class StudentController {
         );
     }
 
+    // 🔐 STUDENT + PARENT
     @GetMapping("/profile")
+    @PreAuthorize("hasAnyRole('STUDENT','PARENT')")
     public ResponseEntity<ApiResponse<String>> profile() {
 
         return ResponseEntity.ok(
                 ApiResponse.ok("Student profile fetched", "Student Profile")
         );
     }
+
+    // 🔐 STUDENT + PARENT
     @GetMapping("/dashboard")
+    @PreAuthorize("hasAnyRole('STUDENT','PARENT')")
     public ResponseEntity<ApiResponse<String>> studentDashboard() {
 
         return ResponseEntity.ok(
                 ApiResponse.ok("Dashboard fetched", "Student & Parent Dashboard")
+        );
+    }
+
+    // 🔐 ADMIN + TEACHER + STUDENT
+    @GetMapping("/{id}/blood-group")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    public ResponseEntity<ApiResponse<String>> getBloodGroupByStudentId(
+            @PathVariable Long id) {
+
+        StudentResponseDto student = studentService.getStudentById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Blood group fetched successfully",
+                        student.getBloodGroup() != null ? student.getBloodGroup().name() : null)
+        );
+    }
+
+    // 🔐 ADMIN + TEACHER + STUDENT
+    @GetMapping("/{id}/religion")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    public ResponseEntity<ApiResponse<String>> getReligionByStudentId(
+            @PathVariable Long id) {
+
+        StudentResponseDto student = studentService.getStudentById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Religion fetched successfully",
+                        student.getReligion() != null ? student.getReligion().name() : null)
+        );
+    }
+
+    // 🔐 ADMIN + TEACHER + STUDENT
+    @GetMapping("/{id}/category")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    public ResponseEntity<ApiResponse<String>> getCategoryByStudentId(
+            @PathVariable Long id) {
+
+        StudentResponseDto student = studentService.getStudentById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Category fetched successfully",
+                        student.getCategory() != null ? student.getCategory().name() : null)
+        );
+    }
+
+    // 🔐 ADMIN + TEACHER + STUDENT
+    @GetMapping("/{id}/standard")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    public ResponseEntity<ApiResponse<String>> getStandardByStudentId(
+            @PathVariable Long id) {
+
+        StudentResponseDto student = studentService.getStudentById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Standard fetched successfully",
+                        student.getStandard() != null ? student.getStandard().name() : null)
+        );
+    }
+
+    // 🔐 ADMIN + TEACHER + STUDENT
+    @GetMapping("/{id}/division")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
+    public ResponseEntity<ApiResponse<String>> getDivisionByStudentId(
+            @PathVariable Long id) {
+
+        StudentResponseDto student = studentService.getStudentById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok("Division fetched successfully",
+                        student.getDivision() != null ? student.getDivision().name() : null)
         );
     }
 }

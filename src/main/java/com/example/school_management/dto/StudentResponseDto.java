@@ -49,7 +49,8 @@ public class StudentResponseDto {
     private String city;
     private String state;
     private String pincode;
-
+    private Standard standard;
+    private Division division;
 
     private String previousSchool;
     private Double previousPercentage;

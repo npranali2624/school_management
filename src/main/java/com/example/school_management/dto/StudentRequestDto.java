@@ -41,6 +41,12 @@ public class StudentRequestDto {
     @NotNull(message = ValidationMessages.RELIGION_REQUIRED)
     private Religion religion;
 
+    @NotNull(message = ValidationMessages.STANDARD_REQUIRED)
+    private Standard standard;
+
+    @NotNull(message = ValidationMessages.DIVISION_REQUIRED)
+    private Division division;
+
     @NotNull(message = ValidationMessages.CATEGORY_REQUIRED)
     private Category category;
 

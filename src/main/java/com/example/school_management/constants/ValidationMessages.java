@@ -149,4 +149,5 @@ public class ValidationMessages {
     public static final String ASSIGNMENT_TITLE_MAX = "Assignment title must not exceed 255 characters";
     public static final String ASSIGNMENT_DESCRIPTION_MAX = "Assignment description must not exceed 2000 characters";
     public static final String SPECIALIZATION_REQUIRED = "Specialization is required";
+    public static final String PREVIOUS_ORG_MAX = "Previous organization name must not exceed 100 characters";
 }
