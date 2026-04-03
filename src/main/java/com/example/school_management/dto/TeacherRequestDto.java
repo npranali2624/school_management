@@ -1,7 +1,6 @@
 package com.example.school_management.dto;
 
 import com.example.school_management.constants.ValidationMessages;
-import com.example.school_management.entity.Subject;
 import com.example.school_management.enums.DegreeType;
 import com.example.school_management.enums.Gender;
 import jakarta.validation.constraints.*;
@@ -13,23 +12,20 @@ import java.time.LocalDate;
 public class TeacherRequestDto {
 
     @NotBlank(message = ValidationMessages.FIRST_NAME_REQUIRED)
-    @Size(max = 20)
+    @Size(max = 50)
     private String firstName;
 
-    @NotBlank(message = ValidationMessages.MIDDLE_NAME_REQUIRED)
-    @Size(max = 20)
+    @Size(max = 50)
     private String middleName;
 
     @NotBlank(message = ValidationMessages.LAST_NAME_REQUIRED)
-    @Size(max = 20)
+    @Size(max = 50)
     private String lastName;
 
     @NotBlank(message = ValidationMessages.EMAIL_REQUIRED)
     @Email(message = ValidationMessages.EMAIL_FORMAT_INVALID)
-    @Size(max = 30)
+    @Size(max = 50)
     private String email;
-
-    private String aadharNo;
 
     @NotBlank(message = ValidationMessages.PASSWORD_REQUIRED)
     @Size(min = 8, max = 20, message = ValidationMessages.PASSWORD_SIZE)
@@ -56,23 +52,23 @@ public class TeacherRequestDto {
     @Size(max = 100)
     private String addressLine2;
 
-    @NotBlank(message = ValidationMessages.CITY_REQUIRED)
-    @Size(max = 30)
+    @Size(max = 50)
     private String city;
 
-    @NotBlank(message = ValidationMessages.STATE_REQUIRED)
-    @Size(max = 30)
+    @Size(max = 50)
     private String state;
 
     @NotBlank(message = ValidationMessages.PINCODE_REQUIRED)
-    @Pattern(regexp = "^[0-9]{6}$", message = "Pincode must be 6 digits")
+    @Pattern(regexp = "^[0-9]{6}$", message = ValidationMessages.PINCODE_PATTERN)
     private String pincode;
 
     @NotBlank(message = ValidationMessages.AADHAR_REQUIRED)
     @Pattern(regexp = "^[0-9]{12}$", message = ValidationMessages.AADHAR_PATTERN)
+    private String aadharNo;
 
-    @NotBlank(message = ValidationMessages.PINCODE_REQUIRED)
-    @Pattern(regexp = "^[0-9]{6}$", message = ValidationMessages.PINCODE_PATTERN)
+    @NotBlank(message = ValidationMessages.PAN_REQUIRED)
+    @Pattern(regexp = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$", message = ValidationMessages.PAN_PATTERN)
+    private String panNo;
 
     @NotNull(message = ValidationMessages.DEGREE_TYPE_REQUIRED)
     private DegreeType degreeType;
@@ -83,37 +79,14 @@ public class TeacherRequestDto {
     @NotNull(message = ValidationMessages.JOINING_DATE_REQUIRED)
     private LocalDate joiningDate;
 
-
-    @NotBlank(message = ValidationMessages.PAN_REQUIRED)
-    @Pattern(regexp = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$", message = ValidationMessages.PAN_PATTERN)
-    private String panNo;
-
-    private String aadharPhoto;
-
-
-    private String panPhoto;
-
-
-    private String degreeCertificate;
-
-
-    private String resignationLetter;
-
-
-    private String resume;
-
     @NotNull(message = ValidationMessages.EXPERIENCE_REQUIRED)
     @PositiveOrZero(message = ValidationMessages.EXPERIENCE_POSITIVE)
+    @Max(50)
     private Integer yearsOfExperience;
 
-
-    @NotBlank(message = ValidationMessages.SUBJECT_REQUIRED)
-    @Size(max = 50)
-    private Subject subject;
-
-    @NotBlank(message = ValidationMessages.ASSIGNED_CLASS_REQUIRED)
-    @Size(max = 20)
-    private Class assignedClass;
+    @NotBlank(message = ValidationMessages.PREVIOUS_SCHOOL_REQUIRED)
+    @Size(max = 100)
+    private String previousSchool;
 
     @NotNull(message = ValidationMessages.SUBJECT_REQUIRED)
     private Long subjectId;
@@ -121,7 +94,21 @@ public class TeacherRequestDto {
     @NotNull(message = ValidationMessages.SPECIALIZATION_REQUIRED)
     private Long specializationId;
 
-    @NotBlank(message = ValidationMessages.PREVIOUS_SCHOOL_REQUIRED)
-    @Size(max = 100)
-    private String previousSchool;
+    // optional — managed from Class side
+    private Long assignedClassId;
+
+    @Size(max = 200)
+    private String aadharPhotourl;
+
+    @Size(max = 200)
+    private String panPhotourl;
+
+    @Size(max = 200)
+    private String degreeCertificateurl;
+
+    @Size(max = 200)
+    private String resignationLetterurl;
+
+    @Size(max = 200)
+    private String resumeurl;
 }

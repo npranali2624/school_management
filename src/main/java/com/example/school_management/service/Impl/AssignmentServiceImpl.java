@@ -10,6 +10,7 @@ import com.example.school_management.enums.AssignmentMarkingType;
 import com.example.school_management.enums.AssignmentStatus;
 import com.example.school_management.enums.AssignmentType;
 import com.example.school_management.exception.ResourceNotFoundException;
+import com.example.school_management.Mapper.AssignmentMapper;
 import com.example.school_management.repo.AssignmentRepository;
 import com.example.school_management.repo.ClassRepository;
 import com.example.school_management.repo.SubjectRepository;
@@ -32,50 +33,25 @@ public class AssignmentServiceImpl implements AssignmentService {
     private final TeacherRepo teacherRepository;
     private final ClassRepository classRepository;
     private final SubjectRepository subjectRepository;
-
+    private final AssignmentMapper assignmentMapper;
 
     @Override
     public AssignmentResponseDto createAssignment(AssignmentRequestDto dto) {
 
-        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Teacher not found with id: " + dto.getTeacherId()));
-
-        Class assignedClass = classRepository.findById(dto.getClassId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Class not found with id: " + dto.getClassId()));
-
-        Subject subject = subjectRepository.findById(dto.getSubjectId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Subject not found with id: " + dto.getSubjectId()));
+        Teacher teacher = findTeacher(dto.getTeacherId());
+        Class assignedClass = findClass(dto.getClassId());
+        Subject subject = findSubject(dto.getSubjectId());
 
         validateMarkingType(dto.getAssignmentType(), dto.getMarkingType());
         validateMarksFields(dto.getMarkingType(), dto.getTotalMarks(), dto.getPassingMarks());
         validateLateSubmission(dto.getAllowLateSubmission(), dto.getDueDate(), dto.getLateSubmissionDueDate());
 
-        Assignment assignment = new Assignment();
-        assignment.setTitle(dto.getTitle());
-        assignment.setDescription(dto.getDescription());
-        assignment.setAssignmentType(dto.getAssignmentType());
-        assignment.setMarkingType(dto.getMarkingType());
-        assignment.setTotalMarks(dto.getTotalMarks());
-        assignment.setPassingMarks(dto.getPassingMarks());
-        assignment.setAssignedDate(LocalDateTime.now());
-        assignment.setDueDate(dto.getDueDate());
-        assignment.setStatus(AssignmentStatus.DRAFT);
-        assignment.setAllowLateSubmission(dto.getAllowLateSubmission() != null ? dto.getAllowLateSubmission() : false);
-        assignment.setLateSubmissionDueDate(Boolean.TRUE.equals(dto.getAllowLateSubmission()) ? dto.getLateSubmissionDueDate() : null);
-        assignment.setAllowedFileTypes(dto.getAllowedFileTypes());
-        assignment.setTeacher(teacher);
-        assignment.setAssignedClass(assignedClass);
-        assignment.setSubject(subject);
+        Assignment saved = assignmentRepository.save(
+                assignmentMapper.toEntity(dto, teacher, assignedClass, subject));
 
-        Assignment saved = assignmentRepository.save(assignment);
         log.info("Assignment created with id: {}", saved.getId());
-        return mapToResponseDto(saved);
+        return assignmentMapper.toResponseDto(saved);
     }
-
-
 
     @Override
     public AssignmentResponseDto updateAssignment(Long id, AssignmentRequestDto dto) {
@@ -94,59 +70,33 @@ public class AssignmentServiceImpl implements AssignmentService {
                 throw new IllegalStateException("Invalid status.");
         }
 
-        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Teacher not found with id: " + dto.getTeacherId()));
-
-        Class assignedClass = classRepository.findById(dto.getClassId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Class not found with id: " + dto.getClassId()));
-
-        Subject subject = subjectRepository.findById(dto.getSubjectId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Subject not found with id: " + dto.getSubjectId()));
+        Teacher teacher = findTeacher(dto.getTeacherId());
+        Class assignedClass = findClass(dto.getClassId());
+        Subject subject = findSubject(dto.getSubjectId());
 
         validateMarkingType(dto.getAssignmentType(), dto.getMarkingType());
         validateMarksFields(dto.getMarkingType(), dto.getTotalMarks(), dto.getPassingMarks());
         validateLateSubmission(dto.getAllowLateSubmission(), dto.getDueDate(), dto.getLateSubmissionDueDate());
 
-        assignment.setTitle(dto.getTitle());
-        assignment.setDescription(dto.getDescription());
-        assignment.setAssignmentType(dto.getAssignmentType());
-        assignment.setMarkingType(dto.getMarkingType());
-        assignment.setTotalMarks(dto.getTotalMarks());
-        assignment.setPassingMarks(dto.getPassingMarks());
-        assignment.setDueDate(dto.getDueDate());
-        assignment.setAllowLateSubmission(dto.getAllowLateSubmission() != null ? dto.getAllowLateSubmission() : false);
-        assignment.setLateSubmissionDueDate(Boolean.TRUE.equals(dto.getAllowLateSubmission()) ? dto.getLateSubmissionDueDate() : null);
-        assignment.setAllowedFileTypes(dto.getAllowedFileTypes());
-        assignment.setTeacher(teacher);
-        assignment.setAssignedClass(assignedClass);
-        assignment.setSubject(subject);
-
+        assignmentMapper.updateEntity(dto, assignment, teacher, assignedClass, subject);
         Assignment updated = assignmentRepository.save(assignment);
+
         log.info("Assignment updated with id: {}", updated.getId());
-        return mapToResponseDto(updated);
+        return assignmentMapper.toResponseDto(updated);
     }
-
-
 
     @Override
     @Transactional
     public AssignmentResponseDto getAssignmentById(Long id) {
         Assignment assignment = findAssignmentById(id);
         autoCloseIfOverdue(assignment);
-        return mapToResponseDto(assignment);
+        return assignmentMapper.toResponseDto(assignment);
     }
 
     @Override
     public List<AssignmentResponseDto> getAllAssignments() {
-        return assignmentRepository.findAll()
-                .stream()
-                .map(this::mapToResponseDto)
-                .toList();
+        return assignmentMapper.toResponseDtoList(assignmentRepository.findAll());
     }
-
 
     @Override
     public void deleteAssignment(Long id) {
@@ -155,7 +105,6 @@ public class AssignmentServiceImpl implements AssignmentService {
         switch (assignment.getStatus()) {
             case DRAFT:
             case CANCELLED:
-
                 break;
             case PUBLISHED:
                 throw new IllegalStateException("PUBLISHED assignment cannot be deleted. Cancel it first.");
@@ -168,8 +117,6 @@ public class AssignmentServiceImpl implements AssignmentService {
         assignmentRepository.delete(assignment);
         log.info("Assignment deleted with id: {}", id);
     }
-
-
 
     @Override
     public AssignmentResponseDto publishAssignment(Long id) {
@@ -195,10 +142,8 @@ public class AssignmentServiceImpl implements AssignmentService {
 
         Assignment saved = assignmentRepository.save(assignment);
         log.info("Assignment published with id: {}", id);
-        return mapToResponseDto(saved);
+        return assignmentMapper.toResponseDto(saved);
     }
-
-
 
     @Override
     public AssignmentResponseDto cancelAssignment(Long id) {
@@ -219,15 +164,35 @@ public class AssignmentServiceImpl implements AssignmentService {
 
         Assignment saved = assignmentRepository.save(assignment);
         log.info("Assignment cancelled with id: {}", id);
-        return mapToResponseDto(saved);
+        return assignmentMapper.toResponseDto(saved);
     }
 
-
+    // -------------------------------------------------------------------------
+    // Private helpers
+    // -------------------------------------------------------------------------
 
     private Assignment findAssignmentById(Long id) {
         return assignmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Assignment not found with id: " + id));
+    }
+
+    private Teacher findTeacher(Long id) {
+        return teacherRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Teacher not found with id: " + id));
+    }
+
+    private Class findClass(Long id) {
+        return classRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Class not found with id: " + id));
+    }
+
+    private Subject findSubject(Long id) {
+        return subjectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Subject not found with id: " + id));
     }
 
     private void autoCloseIfOverdue(Assignment assignment) {
@@ -247,13 +212,11 @@ public class AssignmentServiceImpl implements AssignmentService {
             case DRAFT:
             case CLOSED:
             case CANCELLED:
-
                 break;
             default:
                 throw new IllegalStateException("Invalid status.");
         }
     }
-
 
     private void validateMarkingType(AssignmentType assignmentType, AssignmentMarkingType markingType) {
         if (assignmentType == null || markingType == null) return;
@@ -299,14 +262,12 @@ public class AssignmentServiceImpl implements AssignmentService {
                             "Marks fields must not be set for CHECKED or UNCHECKED marking type.");
                 }
             }
-            case GRADE -> {
-
-            }
+            case GRADE -> { }
         }
     }
 
-
-    private void validateLateSubmission(Boolean allowLateSubmission, LocalDateTime dueDate, LocalDateTime lateSubmissionDueDate) {
+    private void validateLateSubmission(Boolean allowLateSubmission, LocalDateTime dueDate,
+                                        LocalDateTime lateSubmissionDueDate) {
         if (Boolean.TRUE.equals(allowLateSubmission)) {
             if (lateSubmissionDueDate == null) {
                 throw new IllegalArgumentException(
@@ -322,42 +283,5 @@ public class AssignmentServiceImpl implements AssignmentService {
                         "Late submission due date must not be set when late submission is not allowed.");
             }
         }
-    }
-
-
-
-    private AssignmentResponseDto mapToResponseDto(Assignment assignment) {
-
-        AssignmentResponseDto dto = new AssignmentResponseDto();
-
-        dto.setId(assignment.getId());
-        dto.setTitle(assignment.getTitle());
-        dto.setDescription(assignment.getDescription());
-        dto.setAssignmentType(assignment.getAssignmentType());
-        dto.setMarkingType(assignment.getMarkingType());
-        dto.setTotalMarks(assignment.getTotalMarks());
-        dto.setPassingMarks(assignment.getPassingMarks());
-        dto.setAssignedDate(assignment.getAssignedDate());
-        dto.setDueDate(assignment.getDueDate());
-        dto.setStatus(assignment.getStatus());
-        dto.setAllowLateSubmission(assignment.getAllowLateSubmission());
-        dto.setLateSubmissionDueDate(assignment.getLateSubmissionDueDate());
-        dto.setAllowedFileTypes(assignment.getAllowedFileTypes());
-
-        if (assignment.getTeacher() != null) {
-            dto.setTeacherId(assignment.getTeacher().getId());
-            dto.setTeacherName(assignment.getTeacher().getFirstName() + " " + assignment.getTeacher().getLastName());
-        }
-
-        if (assignment.getAssignedClass() != null) {
-            dto.setClassId(assignment.getAssignedClass().getId());
-        }
-
-        if (assignment.getSubject() != null) {
-            dto.setSubjectId(assignment.getSubject().getId());
-            dto.setSubjectName(assignment.getSubject().getSubjectName());
-        }
-
-        return dto;
     }
 }

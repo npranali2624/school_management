@@ -1,7 +1,8 @@
 package com.example.school_management.controller;
 
 import com.example.school_management.dto.ApiResponse;
-import com.example.school_management.entity.Teacher;
+import com.example.school_management.dto.TeacherRequestDto;
+import com.example.school_management.dto.TeacherResponseDto;
 import com.example.school_management.service.TeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,11 @@ public class TeacherController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<?>> createTeacher(
-            @Valid @RequestBody Teacher teacher) {
+            @Valid @RequestBody TeacherRequestDto request) {
         try {
-            Teacher savedTeacher = teacherService.createTeacher(teacher);
+            TeacherResponseDto saved = teacherService.createTeacher(request);
             return ResponseEntity.ok(
-                    ApiResponse.ok("Teacher created successfully", savedTeacher)
+                    ApiResponse.ok("Teacher created successfully", saved)
             );
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.badRequest().body(
@@ -38,14 +39,16 @@ public class TeacherController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public ResponseEntity<ApiResponse<?>> getTeacherById(@PathVariable Long id) {
-        Teacher teacher = teacherService.getTeacherById(id);
-        return ResponseEntity.ok(ApiResponse.ok("Fetched", teacher));
+    public ResponseEntity<ApiResponse<TeacherResponseDto>> getTeacherById(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(
+                ApiResponse.ok("Fetched", teacherService.getTeacherById(id))
+        );
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public ResponseEntity<ApiResponse<List<Teacher>>> getAllTeachers() {
+    public ResponseEntity<ApiResponse<List<TeacherResponseDto>>> getAllTeachers() {
         return ResponseEntity.ok(
                 ApiResponse.ok("Fetched", teacherService.getAllTeachers())
         );
@@ -53,12 +56,11 @@ public class TeacherController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<?>> updateTeacher(
+    public ResponseEntity<ApiResponse<TeacherResponseDto>> updateTeacher(
             @PathVariable Long id,
-            @RequestBody Teacher teacher) {
+            @Valid @RequestBody TeacherRequestDto request) {
         return ResponseEntity.ok(
-                ApiResponse.ok("Updated",
-                        teacherService.updateTeacher(id, teacher))
+                ApiResponse.ok("Updated", teacherService.updateTeacher(id, request))
         );
     }
 
@@ -81,10 +83,11 @@ public class TeacherController {
     public ResponseEntity<ApiResponse<String>> getDegreeTypeByTeacherId(
             @PathVariable Long id) {
         try {
-            Teacher teacher = teacherService.getTeacherById(id);
+            TeacherResponseDto teacher = teacherService.getTeacherById(id);
             return ResponseEntity.ok(
                     ApiResponse.ok("Degree type fetched successfully",
-                            teacher.getDegreeType() != null ? teacher.getDegreeType().name() : null)
+                            teacher.getDegreeType() != null
+                                    ? teacher.getDegreeType().name() : null)
             );
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(

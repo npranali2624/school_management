@@ -1,5 +1,6 @@
 package com.example.school_management.service.Impl;
 
+import com.example.school_management.Mapper.AdminMapper;
 import com.example.school_management.dto.AdminRequestDto;
 import com.example.school_management.dto.AdminResponseDto;
 import com.example.school_management.entity.Admin;
@@ -18,49 +19,31 @@ public class AdminServiceImpl implements AdminService {
     private AdminRepository adminRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AdminMapper adminMapper;
+
     @Override
     public AdminResponseDto createAdmin(AdminRequestDto request) {
-
         if (adminRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
 
-        Admin admin = Admin.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .isActive(true)
-                .build();
+        Admin admin = adminMapper.toEntity(request);
+        admin.setPassword(passwordEncoder.encode(request.getPassword()));
+        admin.setActive(true);
 
-        Admin saved = adminRepository.save(admin);
-
-        return AdminResponseDto.builder()
-                .id(saved.getId())
-                .username(saved.getUsername())
-                .isActive(saved.isActive())
-                .build();
+        return adminMapper.toResponseDto(adminRepository.save(admin));
     }
 
     @Override
     public List<AdminResponseDto> getAllAdmins() {
-        return adminRepository.findAll()
-                .stream()
-                .map(admin -> AdminResponseDto.builder()
-                        .id(admin.getId())
-                        .username(admin.getUsername())
-                        .isActive(admin.isActive())
-                        .build())
-                .collect(Collectors.toList());
+        return adminMapper.toResponseDtoList(adminRepository.findAll());
     }
 
     @Override
     public AdminResponseDto getAdminById(Long id) {
         Admin admin = adminRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Admin not found"));
-
-        return AdminResponseDto.builder()
-                .id(admin.getId())
-                .username(admin.getUsername())
-                .isActive(admin.isActive())
-                .build();
+        return adminMapper.toResponseDto(admin);
     }
 }
