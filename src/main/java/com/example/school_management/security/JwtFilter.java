@@ -42,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                     var userDetails = service.loadUserByUsername(username);
 
-                    // ✅ FIXED: add ROLE_ prefix
+
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
