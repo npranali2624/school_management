@@ -11,4 +11,6 @@ public interface SubjectService
     SubjectResponseDto getSubjectByCode(Integer subjectCode);
     SubjectResponseDto updateSubject(Integer subjectCode, SubjectRequestDto request);
     void deleteSubject(Integer subjectCode);
+
+    SubjectResponseDto getSubjectById(Long id);
 }
