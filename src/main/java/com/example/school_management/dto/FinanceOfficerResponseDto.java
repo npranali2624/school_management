@@ -2,6 +2,7 @@ package com.example.school_management.dto;
 
 import com.example.school_management.enums.DegreeType;
 import com.example.school_management.enums.Gender;
+import com.example.school_management.enums.Role;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -36,5 +37,5 @@ public class FinanceOfficerResponseDto {
     private String resignationLetterurl;
     private String resumeurl;
 
-    private String role;
+    private Role role;
 }

@@ -20,7 +20,8 @@ public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
     private final TeacherRepo teacherRepository;
 
-    private Subject mapToEntity(SubjectRequestDto request) {
+    private Subject mapToEntity(SubjectRequestDto request)
+    {
         Subject subject = new Subject();
         subject.setSubjectName(request.getSubjectName());
         subject.setSubjectCode(request.getSubjectCode());

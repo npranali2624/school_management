@@ -29,7 +29,7 @@ public class TeacherController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<?>> createTeacher(
-            @Valid @RequestBody TeacherRequestDto request) {  // ✅ DTO instead of entity
+            @Valid @RequestBody TeacherRequestDto request) {
         try {
             TeacherResponseDto savedTeacher = teacherService.createTeacher(request);
             return ResponseEntity.ok(
@@ -46,13 +46,13 @@ public class TeacherController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<?>> getTeacherById(@PathVariable Long id) {
-        TeacherResponseDto teacher = teacherService.getTeacherById(id);  // ✅ DTO
+        TeacherResponseDto teacher = teacherService.getTeacherById(id);
         return ResponseEntity.ok(ApiResponse.ok("Fetched", teacher));
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public ResponseEntity<ApiResponse<List<TeacherResponseDto>>> getAllTeachers() {  // ✅ DTO list
+    public ResponseEntity<ApiResponse<List<TeacherResponseDto>>> getAllTeachers() {
         return ResponseEntity.ok(
                 ApiResponse.ok("Fetched", teacherService.getAllTeachers())
         );
@@ -62,7 +62,7 @@ public class TeacherController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<?>> updateTeacher(
             @PathVariable Long id,
-            @Valid @RequestBody TeacherRequestDto request) {  // ✅ DTO instead of entity
+            @Valid @RequestBody TeacherRequestDto request) {
         return ResponseEntity.ok(
                 ApiResponse.ok("Updated",
                         teacherService.updateTeacher(id, request))
@@ -90,7 +90,7 @@ public class TeacherController {
         try {
             TeacherResponseDto teacher = teacherService.getTeacherById(id);
             String degreeType = teacher.getDegreeType() != null
-                    ? teacher.getDegreeType().name()  // ✅ convert enum to String explicitly
+                    ? teacher.getDegreeType().name()
                     : null;
             return ResponseEntity.ok(
                     ApiResponse.ok("Degree type fetched successfully", degreeType)
