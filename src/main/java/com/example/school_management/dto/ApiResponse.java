@@ -13,12 +13,11 @@ public class ApiResponse<T> {
     private String message;
     private T data;
 
-    // Success with data
+
     public static <T> ApiResponse<T> ok(String message, T data) {
         return new ApiResponse<>(true, message, data);
     }
 
-    // Error (no data)
     public static <T> ApiResponse<T> error(String message) {
         return new ApiResponse<>(false, message, null);
     }

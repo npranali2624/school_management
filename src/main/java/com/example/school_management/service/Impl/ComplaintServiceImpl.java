@@ -104,10 +104,6 @@ public class ComplaintServiceImpl implements ComplaintService {
         complaintRepository.deleteById(id);
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
-
     private Complaint findComplaintById(Long id) {
         return complaintRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Complaint not found"));

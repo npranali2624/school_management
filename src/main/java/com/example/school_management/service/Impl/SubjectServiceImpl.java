@@ -134,7 +134,6 @@ public class SubjectServiceImpl implements SubjectService {
         subjectRepository.deleteById(subject.getId());
     }
 
-    // 🆕 Add this at the bottom inside SubjectServiceImpl class
     @Override
     public SubjectResponseDto getSubjectById(Long id) {
         Subject subject = subjectRepository.findById(id)

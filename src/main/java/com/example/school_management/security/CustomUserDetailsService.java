@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private ParentRepository parentRepository;
     @Autowired
-    private AdminRepository adminRepository; // ← ADDED
+    private AdminRepository adminRepository;
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
 

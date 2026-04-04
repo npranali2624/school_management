@@ -20,7 +20,6 @@ public class FinanceOfficerController {
 
     private final FinanceOfficerService financeOfficerService;
 
-    // 🔐 FINANCE only
     @GetMapping("/dashboard")
     @PreAuthorize("hasRole('FINANCE')")
     public ResponseEntity<ApiResponse<String>> financeDashboard() {
@@ -29,7 +28,6 @@ public class FinanceOfficerController {
         );
     }
 
-    // 🔐 ADMIN only (create finance officer)
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<FinanceOfficerResponseDto>> createFinanceOfficer(
@@ -41,7 +39,6 @@ public class FinanceOfficerController {
                 .body(ApiResponse.ok("Finance Officer created successfully", response));
     }
 
-    // 🔐 ADMIN + FINANCE
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','FINANCE')")
     public ResponseEntity<ApiResponse<List<FinanceOfficerResponseDto>>> getAllFinanceOfficers() {
@@ -53,7 +50,6 @@ public class FinanceOfficerController {
         );
     }
 
-    // 🔐 ADMIN + FINANCE
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCE')")
     public ResponseEntity<ApiResponse<FinanceOfficerResponseDto>> getFinanceOfficerById(
@@ -66,7 +62,6 @@ public class FinanceOfficerController {
         );
     }
 
-    // 🔐 ADMIN only
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<FinanceOfficerResponseDto>> updateFinanceOfficer(
@@ -80,7 +75,6 @@ public class FinanceOfficerController {
         );
     }
 
-    // 🔐 ADMIN only
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> toggleStatus(@PathVariable Long id) {
@@ -92,7 +86,6 @@ public class FinanceOfficerController {
         );
     }
 
-    // 🔐 ADMIN only
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> deleteFinanceOfficer(@PathVariable Long id) {
@@ -104,7 +97,6 @@ public class FinanceOfficerController {
         );
     }
 
-    // ✅ 🔐 ADMIN + FINANCE (ADDED MISSING API)
     @GetMapping("/{id}/degree-type")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCE')")
     public ResponseEntity<ApiResponse<String>> getDegreeTypeByFinanceOfficerId(

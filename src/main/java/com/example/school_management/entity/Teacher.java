@@ -41,7 +41,6 @@ public class Teacher extends Employee {
     private Subject specialization;
 
 
-    // One Teacher → Many Complaints
     @JsonIgnore
     @Builder.Default
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

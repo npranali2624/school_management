@@ -41,8 +41,6 @@ public class JwtFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().getAuthentication() == null) {
 
                     var userDetails = service.loadUserByUsername(username);
-
-                    // ✅ FIXED: add ROLE_ prefix
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
