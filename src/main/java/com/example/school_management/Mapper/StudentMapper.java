@@ -147,10 +147,6 @@ public class StudentMapper {
                 .collect(Collectors.toList());
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
-
     private Parent buildParent(StudentRequestDto dto) {
         if (dto.getPassword() == null || dto.getPassword().isBlank()) {
             throw new IllegalArgumentException("Password is required for Parent account");

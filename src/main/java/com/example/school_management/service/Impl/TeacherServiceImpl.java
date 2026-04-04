@@ -23,7 +23,6 @@ public class TeacherServiceImpl implements TeacherService {
     private final PasswordEncoder passwordEncoder;
     private final SubjectRepository subjectRepository;
 
-    // ✅ Maps entity → ResponseDto
     private TeacherResponseDto toDto(Teacher teacher) {
         TeacherResponseDto dto = new TeacherResponseDto();
         dto.setId(teacher.getId());
@@ -58,15 +57,15 @@ public class TeacherServiceImpl implements TeacherService {
 
         if (teacher.getSubject() != null) {
             dto.setSubjectId(teacher.getSubject().getId());
-            dto.setSubjectName(teacher.getSubject().getSubjectName());       // ✅ fixed
+            dto.setSubjectName(teacher.getSubject().getSubjectName());
         }
         if (teacher.getSpecialization() != null) {
             dto.setSpecializationId(teacher.getSpecialization().getId());
-            dto.setSpecializationName(teacher.getSpecialization().getSubjectName()); // ✅ fixed
+            dto.setSpecializationName(teacher.getSpecialization().getSubjectName());
         }
         if (teacher.getAssignedClass() != null) {
             dto.setAssignedClassId(teacher.getAssignedClass().getId());
-            dto.setAssignedClassName(teacher.getAssignedClass().getClassName());     // ✅ fixed
+            dto.setAssignedClassName(teacher.getAssignedClass().getClassName());
         }
 
         return dto;
@@ -107,6 +106,7 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setDegreeCertificateurl(request.getDegreeCertificateurl());
         teacher.setResignationLetterurl(request.getResignationLetterurl());
         teacher.setResumeurl(request.getResumeurl());
+        teacher.setRole(request.getRole());
 
         if (request.getSubjectId() != null) {
             Subject subject = subjectRepository.findById(request.getSubjectId())

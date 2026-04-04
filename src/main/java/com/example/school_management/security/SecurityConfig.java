@@ -28,19 +28,9 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-
-                        // सार्वजनिक APIs
                         .requestMatchers("/auth/**").permitAll()
-
-                        // 🔐 PROTECTED APIs
                         .requestMatchers("/teachers/**").authenticated()
                         .requestMatchers("/api/students/**").authenticated()
-                        .requestMatchers("/finance/**").authenticated()
-
-                        // admin (optional)
-                        .requestMatchers("/admin/**").permitAll()
-
-                        // बाकी सर्व
                         .anyRequest().authenticated()
                 )
 
