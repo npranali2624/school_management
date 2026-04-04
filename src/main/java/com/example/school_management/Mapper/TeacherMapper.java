@@ -22,7 +22,6 @@ public class TeacherMapper {
     private final ClassRepository classRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // TeacherRequestDto → New Teacher entity (for create)
     public Teacher toEntity(TeacherRequestDto dto) {
         Teacher teacher = new Teacher();
         applyDtoToEntity(dto, teacher);
@@ -30,7 +29,6 @@ public class TeacherMapper {
         return teacher;
     }
 
-    // TeacherRequestDto → Existing Teacher entity (for update)
     public void updateEntity(TeacherRequestDto dto, Teacher teacher) {
         applyDtoToEntity(dto, teacher);
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
@@ -38,7 +36,6 @@ public class TeacherMapper {
         }
     }
 
-    // Teacher entity → TeacherResponseDto
     public TeacherResponseDto toResponseDto(Teacher teacher) {
         TeacherResponseDto dto = new TeacherResponseDto();
 
@@ -90,16 +87,12 @@ public class TeacherMapper {
         return dto;
     }
 
-    // List<Teacher> → List<TeacherResponseDto>
     public List<TeacherResponseDto> toResponseDtoList(List<Teacher> teachers) {
         return teachers.stream()
                 .map(this::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
 
     private void applyDtoToEntity(TeacherRequestDto dto, Teacher teacher) {
         teacher.setFirstName(dto.getFirstName());

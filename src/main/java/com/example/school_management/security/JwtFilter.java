@@ -42,19 +42,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
                     var userDetails = service.loadUserByUsername(username);
 
-                    // ✅ FIXED: add ROLE_ prefix
                     UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
                                     null,
                                     List.of(new SimpleGrantedAuthority( "ROLE_" +role))
                             );
-
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
-
         } catch (Exception e) {
             System.out.println("JWT Error: " + e.getMessage());
         }

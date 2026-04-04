@@ -25,7 +25,6 @@ public class JwtUtil {
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-
     public String extractUsername(String token) {
         return getClaims(token).getSubject();
     }

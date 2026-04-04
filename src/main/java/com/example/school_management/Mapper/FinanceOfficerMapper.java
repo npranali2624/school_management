@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @Component
 public class FinanceOfficerMapper {
 
-    // FinanceOfficerRequestDto → New FinanceOfficer entity (for create)
     public FinanceOfficer toEntity(FinanceOfficerRequestDto dto) {
         return FinanceOfficer.builder()
                 .firstName(dto.getFirstName())
@@ -41,7 +40,6 @@ public class FinanceOfficerMapper {
                 .build();
     }
 
-    // FinanceOfficerRequestDto → Existing FinanceOfficer entity (for update)
     public void updateEntity(FinanceOfficerRequestDto dto, FinanceOfficer officer) {
         officer.setFirstName(dto.getFirstName());
         officer.setMiddleName(dto.getMiddleName());
@@ -69,7 +67,6 @@ public class FinanceOfficerMapper {
         officer.setResumeurl(dto.getResumeurl());
     }
 
-    // FinanceOfficer entity → FinanceOfficerResponseDto
     public FinanceOfficerResponseDto toResponseDto(FinanceOfficer officer) {
         FinanceOfficerResponseDto dto = new FinanceOfficerResponseDto();
         dto.setId(officer.getId());
@@ -98,11 +95,10 @@ public class FinanceOfficerMapper {
         dto.setResignationLetterurl(officer.getResignationLetterurl());
         dto.setResumeurl(officer.getResumeurl());
         dto.setActive(officer.isActive());
-        dto.setRole(officer.getRole().name());
+        dto.setRole(officer.getRole());
         return dto;
     }
 
-    // List<FinanceOfficer> → List<FinanceOfficerResponseDto>
     public List<FinanceOfficerResponseDto> toResponseDtoList(List<FinanceOfficer> officers) {
         return officers.stream()
                 .map(this::toResponseDto)

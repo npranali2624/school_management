@@ -59,10 +59,6 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
-
     private void sendReceiptEmailIfApplicable(Student student, Payment payment, String receipt) {
         if (student == null
                 || student.getParent() == null

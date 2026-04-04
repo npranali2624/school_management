@@ -73,9 +73,7 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteById(id);
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
+
 
     private Student findById(Long id) {
         return studentRepository.findById(id)

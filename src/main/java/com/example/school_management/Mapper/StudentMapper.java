@@ -17,7 +17,6 @@ public class StudentMapper {
 
     private final PasswordEncoder passwordEncoder;
 
-    // StudentRequestDto → New Student entity (for create)
     public Student toEntity(StudentRequestDto dto) {
         Parent parent = buildParent(dto);
 
@@ -48,7 +47,6 @@ public class StudentMapper {
                 .build();
     }
 
-    // StudentRequestDto → Existing Student entity (for update)
     public void updateEntity(Student student, StudentRequestDto dto) {
         student.setFirstName(dto.getFirstName());
         student.setMiddleName(dto.getMiddleName());
@@ -83,7 +81,6 @@ public class StudentMapper {
         student.setIncomeCertificateUrl(dto.getIncomeCertificateUrl());
     }
 
-    // Student entity → StudentResponseDto
     public StudentResponseDto toResponseDto(Student student) {
         StudentResponseDto dto = new StudentResponseDto();
 
@@ -140,16 +137,12 @@ public class StudentMapper {
         return dto;
     }
 
-    // List<Student> → List<StudentResponseDto>
     public List<StudentResponseDto> toResponseDtoList(List<Student> students) {
         return students.stream()
                 .map(this::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
 
     private Parent buildParent(StudentRequestDto dto) {
         if (dto.getPassword() == null || dto.getPassword().isBlank()) {

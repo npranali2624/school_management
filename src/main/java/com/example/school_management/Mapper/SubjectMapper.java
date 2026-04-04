@@ -18,19 +18,16 @@ public class SubjectMapper {
 
     private final TeacherRepo teacherRepository;
 
-    // SubjectRequestDto → New Subject entity (for create)
     public Subject toEntity(SubjectRequestDto dto) {
         Subject subject = new Subject();
         applyDtoToEntity(dto, subject);
         return subject;
     }
 
-    // SubjectRequestDto → Existing Subject entity (for update)
     public void updateEntity(SubjectRequestDto dto, Subject subject) {
         applyDtoToEntity(dto, subject);
     }
 
-    // Subject entity → SubjectResponseDto
     public SubjectResponseDto toResponseDto(Subject subject) {
         SubjectResponseDto response = new SubjectResponseDto();
         response.setId(subject.getId());
@@ -56,16 +53,11 @@ public class SubjectMapper {
         return response;
     }
 
-    // List<Subject> → List<SubjectResponseDto>
     public List<SubjectResponseDto> toResponseDtoList(List<Subject> subjects) {
         return subjects.stream()
                 .map(this::toResponseDto)
                 .collect(Collectors.toList());
     }
-
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
 
     private void applyDtoToEntity(SubjectRequestDto dto, Subject subject) {
         subject.setSubjectName(dto.getSubjectName());

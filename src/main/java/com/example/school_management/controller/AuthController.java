@@ -17,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -48,7 +49,7 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("UNKNOWN");
 
-        //  REMOVE ROLE_ prefix
+
         role = role.replace("ROLE_", "");
 
         String token = jwtUtil.generateToken(request.getIdentifier(), role);

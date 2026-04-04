@@ -19,7 +19,6 @@ public class AssignmentController {
 
     private final AssignmentService assignmentService;
 
-    // Create Assignment
     @PostMapping
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> createAssignment(
             @Valid @RequestBody AssignmentRequestDto requestDto) {
@@ -30,7 +29,6 @@ public class AssignmentController {
                 .body(ApiResponse.ok("Assignment created successfully", response));
     }
 
-    // Get Assignment by ID
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> getAssignmentById(
             @PathVariable Long id) {
@@ -42,7 +40,7 @@ public class AssignmentController {
         );
     }
 
-    // Get All Assignments
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<AssignmentResponseDto>>> getAllAssignments() {
 
@@ -53,7 +51,6 @@ public class AssignmentController {
         );
     }
 
-    // Update Assignment
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> updateAssignment(
             @PathVariable Long id,
@@ -66,7 +63,6 @@ public class AssignmentController {
         );
     }
 
-    // Delete Assignment
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<String>> deleteAssignment(@PathVariable Long id) {
 
@@ -77,7 +73,6 @@ public class AssignmentController {
         );
     }
 
-    // Publish Assignment
     @PatchMapping("/{id}/publish")
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> publishAssignment(
             @PathVariable Long id) {
@@ -89,7 +84,6 @@ public class AssignmentController {
         );
     }
 
-    // Cancel Assignment
     @PatchMapping("/{id}/cancel")
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> cancelAssignment(
             @PathVariable Long id) {

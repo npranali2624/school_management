@@ -20,7 +20,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // 🔐 ADMIN only (admit student)
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<StudentResponseDto>> admitStudent(
@@ -32,7 +32,7 @@ public class StudentController {
                 .body(ApiResponse.ok("Student admitted successfully", response));
     }
 
-    // 🔐 ADMIN + TEACHER
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<List<StudentResponseDto>>> getAllStudents() {
@@ -44,7 +44,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN + TEACHER
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<StudentResponseDto>> getStudentById(
@@ -57,7 +57,6 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN + TEACHER
     @GetMapping("/roll/{rollNumber}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<StudentResponseDto>> getStudentByRollNumber(
@@ -70,7 +69,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN only
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<StudentResponseDto>> updateStudent(
@@ -84,7 +83,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN only
+
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<String>> toggleStatus(@PathVariable Long id) {
@@ -108,7 +107,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 STUDENT + PARENT
+
     @GetMapping("/profile")
     @PreAuthorize("hasAnyRole('STUDENT','PARENT')")
     public ResponseEntity<ApiResponse<String>> profile() {
@@ -118,7 +117,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 STUDENT + PARENT
+
     @GetMapping("/dashboard")
     @PreAuthorize("hasAnyRole('STUDENT','PARENT')")
     public ResponseEntity<ApiResponse<String>> studentDashboard() {
@@ -128,7 +127,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN + TEACHER + STUDENT
+
     @GetMapping("/{id}/blood-group")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     public ResponseEntity<ApiResponse<String>> getBloodGroupByStudentId(
@@ -142,7 +141,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN + TEACHER + STUDENT
+
     @GetMapping("/{id}/religion")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     public ResponseEntity<ApiResponse<String>> getReligionByStudentId(
@@ -156,7 +155,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN + TEACHER + STUDENT
+
     @GetMapping("/{id}/category")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     public ResponseEntity<ApiResponse<String>> getCategoryByStudentId(
@@ -170,7 +169,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN + TEACHER + STUDENT
+
     @GetMapping("/{id}/standard")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     public ResponseEntity<ApiResponse<String>> getStandardByStudentId(
@@ -184,7 +183,7 @@ public class StudentController {
         );
     }
 
-    // 🔐 ADMIN + TEACHER + STUDENT
+
     @GetMapping("/{id}/division")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER','STUDENT')")
     public ResponseEntity<ApiResponse<String>> getDivisionByStudentId(

@@ -65,9 +65,6 @@ public class FinanceOfficerServiceImpl implements FinanceOfficerService {
         financeOfficerRepository.delete(findById(id));
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
 
     private FinanceOfficer findById(Long id) {
         return financeOfficerRepository.findById(id)

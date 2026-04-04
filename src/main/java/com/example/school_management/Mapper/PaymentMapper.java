@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @Component
 public class PaymentMapper {
 
-    // PaymentRequestDto → New Payment entity (for create)
     public Payment toEntity(PaymentRequestDto dto, Student student) {
         Payment payment = new Payment();
         payment.setTotalAmount(dto.getTotalAmount());
@@ -30,7 +29,6 @@ public class PaymentMapper {
         return payment;
     }
 
-    // Payment entity → PaymentResponseDto
     public PaymentResponseDto toResponseDto(Payment payment, String message) {
         return PaymentResponseDto.builder()
                 .receiptNumber(payment.getReceiptNumber())

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 public class ComplaintMapper {
 
-    // ComplaintRequestDto → New Complaint entity (for create)
     public Complaint toEntity(ComplaintRequestDto dto, Student student, Teacher teacher) {
         Complaint complaint = Complaint.builder()
                 .title(dto.getTitle())
@@ -31,7 +30,6 @@ public class ComplaintMapper {
         return complaint;
     }
 
-    // Complaint entity → ComplaintResponseDto
     public ComplaintResponseDto toResponseDto(Complaint c) {
         return ComplaintResponseDto.builder()
                 .id(c.getId())
@@ -55,7 +53,6 @@ public class ComplaintMapper {
                 .build();
     }
 
-    // List<Complaint> → List<ComplaintResponseDto>
     public List<ComplaintResponseDto> toResponseDtoList(List<Complaint> complaints) {
         return complaints.stream()
                 .map(this::toResponseDto)

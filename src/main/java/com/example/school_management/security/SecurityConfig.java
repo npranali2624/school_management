@@ -26,28 +26,18 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-
                 .authorizeHttpRequests(auth -> auth
 
-                        // सार्वजनिक APIs
                         .requestMatchers("/auth/**").permitAll()
-
-                        // 🔐 PROTECTED APIs
                         .requestMatchers("/teachers/**").authenticated()
                         .requestMatchers("/api/students/**").authenticated()
                         .requestMatchers("/finance/**").authenticated()
-
-                        // admin (optional)
-                        .requestMatchers("/admin/**").permitAll()
-
-                        // बाकी सर्व
+                        .requestMatchers("/admin/**").authenticated()
                         .anyRequest().authenticated()
                 )
-
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -25,7 +25,6 @@ public class EnumController {
         return ResponseEntity.ok(list);
     }
 
-
     @GetMapping("/religions")
     public ResponseEntity<List<Map<String, String>>> getReligions() {
         List<Map<String, String>> list = new ArrayList<>();

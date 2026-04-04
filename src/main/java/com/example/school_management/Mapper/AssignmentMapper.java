@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @Component
 public class AssignmentMapper {
 
-    // AssignmentRequestDto → New Assignment entity (for create)
     public Assignment toEntity(AssignmentRequestDto dto, Teacher teacher, Class assignedClass, Subject subject) {
         Assignment assignment = new Assignment();
         applyDtoToEntity(dto, assignment, teacher, assignedClass, subject);
@@ -25,12 +24,10 @@ public class AssignmentMapper {
         return assignment;
     }
 
-    // AssignmentRequestDto → Existing Assignment entity (for update)
     public void updateEntity(AssignmentRequestDto dto, Assignment assignment, Teacher teacher, Class assignedClass, Subject subject) {
         applyDtoToEntity(dto, assignment, teacher, assignedClass, subject);
     }
 
-    // Assignment entity → AssignmentResponseDto
     public AssignmentResponseDto toResponseDto(Assignment assignment) {
         AssignmentResponseDto dto = new AssignmentResponseDto();
 
@@ -65,14 +62,12 @@ public class AssignmentMapper {
         return dto;
     }
 
-    // List<Assignment> → List<AssignmentResponseDto>
     public List<AssignmentResponseDto> toResponseDtoList(List<Assignment> assignments) {
         return assignments.stream()
                 .map(this::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    // ---- private shared logic ----
 
     private void applyDtoToEntity(AssignmentRequestDto dto, Assignment assignment,
                                   Teacher teacher, Class assignedClass, Subject subject) {

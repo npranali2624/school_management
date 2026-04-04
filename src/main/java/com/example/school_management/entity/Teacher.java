@@ -40,8 +40,6 @@ public class Teacher extends Employee {
     @JoinColumn(name = "specialization_subject_id")
     private Subject specialization;
 
-
-    // One Teacher → Many Complaints
     @JsonIgnore
     @Builder.Default
     @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

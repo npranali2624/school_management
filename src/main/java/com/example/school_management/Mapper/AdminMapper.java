@@ -11,15 +11,13 @@ import java.util.stream.Collectors;
 @Component
 public class AdminMapper {
 
-    // AdminRequestDto → Admin entity
     public Admin toEntity(AdminRequestDto dto) {
         Admin admin = new Admin();
         admin.setUsername(dto.getUsername());
-        admin.setPassword(dto.getPassword()); // encode before calling this
+        admin.setPassword(dto.getPassword());
         return admin;
     }
 
-    // Admin entity → AdminResponseDto
     public AdminResponseDto toResponseDto(Admin admin) {
         return AdminResponseDto.builder()
                 .id(admin.getId())
@@ -28,7 +26,6 @@ public class AdminMapper {
                 .build();
     }
 
-    // List<Admin> → List<AdminResponseDto>
     public List<AdminResponseDto> toResponseDtoList(List<Admin> admins) {
         return admins.stream()
                 .map(this::toResponseDto)
