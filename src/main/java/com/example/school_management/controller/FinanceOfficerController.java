@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/finance")
+@RequestMapping("/api/v1/finance")
 @RequiredArgsConstructor
 public class FinanceOfficerController {
 
