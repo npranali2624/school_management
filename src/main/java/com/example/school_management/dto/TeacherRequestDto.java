@@ -3,6 +3,7 @@ package com.example.school_management.dto;
 import com.example.school_management.constants.ValidationMessages;
 import com.example.school_management.enums.DegreeType;
 import com.example.school_management.enums.Gender;
+import com.example.school_management.enums.Role;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -10,6 +11,9 @@ import java.time.LocalDate;
 
 @Data
 public class TeacherRequestDto {
+
+    @NotNull(message = "Role is required")
+    private Role role;
 
     @NotBlank(message = ValidationMessages.FIRST_NAME_REQUIRED)
     @Size(max = 50)

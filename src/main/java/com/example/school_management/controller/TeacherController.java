@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teachers")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/v1/teachers")
 @RequiredArgsConstructor
 public class TeacherController {
 
@@ -86,7 +85,6 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}/degree-type")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<ApiResponse<String>> getDegreeTypeByTeacherId(
             @PathVariable Long id) {
         try {

@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     @Autowired
@@ -49,7 +48,7 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("UNKNOWN");
 
-
+        //  REMOVE ROLE_ prefix
         role = role.replace("ROLE_", "");
 
         String token = jwtUtil.generateToken(request.getIdentifier(), role);
