@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -48,7 +50,6 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("UNKNOWN");
 
-        //  REMOVE ROLE_ prefix
         role = role.replace("ROLE_", "");
 
         String token = jwtUtil.generateToken(request.getIdentifier(), role);
@@ -60,5 +61,10 @@ public class AuthController {
                         "identifier", user.getUsername()
                 ))
         );
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok(ApiResponse.ok("Logout successful", null));
     }
 }

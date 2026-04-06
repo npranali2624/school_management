@@ -18,20 +18,23 @@ repositories {
 }
 
 dependencies {
+	// JPA and Web
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.itextpdf:itextpdf:5.5.13.3'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	// MySQL Driver — must specify version
+	runtimeOnly 'com.mysql:mysql-connector-j:8.1.0'
 
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 

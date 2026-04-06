@@ -167,10 +167,6 @@ public class AssignmentServiceImpl implements AssignmentService {
         return assignmentMapper.toResponseDto(saved);
     }
 
-    // -------------------------------------------------------------------------
-    // Private helpers
-    // -------------------------------------------------------------------------
-
     private Assignment findAssignmentById(Long id) {
         return assignmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(

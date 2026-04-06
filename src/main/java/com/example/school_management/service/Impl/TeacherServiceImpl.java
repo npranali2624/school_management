@@ -1,28 +1,26 @@
 package com.example.school_management.service.Impl;
 
+import com.example.school_management.Mapper.TeacherMapper;
 import com.example.school_management.dto.TeacherRequestDto;
 import com.example.school_management.dto.TeacherResponseDto;
-import com.example.school_management.entity.Subject;
 import com.example.school_management.entity.Teacher;
-import com.example.school_management.repo.SubjectRepository;
+import com.example.school_management.enums.Role;
 import com.example.school_management.repo.TeacherRepo;
 import com.example.school_management.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepo teacherRepo;
-    private final PasswordEncoder passwordEncoder;
-    private final SubjectRepository subjectRepository;
+    private final TeacherMapper teacherMapper;
 
+<<<<<<< HEAD
     private TeacherResponseDto toDto(Teacher teacher) {
         TeacherResponseDto dto = new TeacherResponseDto();
         dto.setId(teacher.getId());
@@ -70,16 +68,21 @@ public class TeacherServiceImpl implements TeacherService {
 
         return dto;
     }
+=======
+>>>>>>> pranali
 
     @Override
     public TeacherResponseDto createTeacher(TeacherRequestDto request) {
+
         if (teacherRepo.existsByEmail(request.getEmail())) {
             throw new DataIntegrityViolationException("Email already exists");
         }
+
         if (teacherRepo.existsByMobile(request.getMobile())) {
             throw new DataIntegrityViolationException("Mobile already exists");
         }
 
+<<<<<<< HEAD
         Teacher teacher = new Teacher();
         teacher.setFirstName(request.getFirstName());
         teacher.setMiddleName(request.getMiddleName());
@@ -107,39 +110,37 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setResignationLetterurl(request.getResignationLetterurl());
         teacher.setResumeurl(request.getResumeurl());
         teacher.setRole(request.getRole());
+=======
+>>>>>>> pranali
 
-        if (request.getSubjectId() != null) {
-            Subject subject = subjectRepository.findById(request.getSubjectId())
-                    .orElseThrow(() -> new RuntimeException("Subject not found"));
-            teacher.setSubject(subject);
-        }
+        Teacher teacher = teacherMapper.toEntity(request);
 
-        if (request.getSpecializationId() != null) {
-            Subject specialization = subjectRepository.findById(request.getSpecializationId())
-                    .orElseThrow(() -> new RuntimeException("Specialization not found"));
-            teacher.setSpecialization(specialization);
-        }
 
-        return toDto(teacherRepo.save(teacher));
+        teacher.setRole(Role.TEACHER);
+        teacher.setActive(true);
+
+        return teacherMapper.toResponseDto(teacherRepo.save(teacher));
     }
+
 
     @Override
     public TeacherResponseDto getTeacherById(Long id) {
         Teacher teacher = teacherRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id));
-        return toDto(teacher);
+
+        return teacherMapper.toResponseDto(teacher);
     }
+
 
     @Override
     public List<TeacherResponseDto> getAllTeachers() {
-        return teacherRepo.findAll()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+        return teacherMapper.toResponseDtoList(teacherRepo.findAll());
     }
+
 
     @Override
     public TeacherResponseDto updateTeacher(Long id, TeacherRequestDto request) {
+
         Teacher existing = teacherRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Teacher not found with id: " + id));
 
@@ -155,49 +156,12 @@ public class TeacherServiceImpl implements TeacherService {
             throw new DataIntegrityViolationException("Mobile already exists");
         }
 
-        if (request.getFirstName() != null) existing.setFirstName(request.getFirstName());
-        if (request.getMiddleName() != null) existing.setMiddleName(request.getMiddleName());
-        if (request.getLastName() != null) existing.setLastName(request.getLastName());
-        if (request.getEmail() != null) existing.setEmail(request.getEmail());
-        if (request.getMobile() != null) existing.setMobile(request.getMobile());
-        if (request.getGender() != null) existing.setGender(request.getGender());
-        if (request.getDob() != null) existing.setDob(request.getDob());
-        if (request.getAddressLine1() != null) existing.setAddressLine1(request.getAddressLine1());
-        if (request.getAddressLine2() != null) existing.setAddressLine2(request.getAddressLine2());
-        if (request.getCity() != null) existing.setCity(request.getCity());
-        if (request.getState() != null) existing.setState(request.getState());
-        if (request.getPincode() != null) existing.setPincode(request.getPincode());
-        if (request.getAadharNo() != null) existing.setAadharNo(request.getAadharNo());
-        if (request.getPanNo() != null) existing.setPanNo(request.getPanNo());
-        if (request.getDegreeType() != null) existing.setDegreeType(request.getDegreeType());
-        if (request.getCustomDegreeName() != null) existing.setCustomDegreeName(request.getCustomDegreeName());
-        if (request.getJoiningDate() != null) existing.setJoiningDate(request.getJoiningDate());
-        if (request.getYearsOfExperience() != null) existing.setYearsOfExperience(request.getYearsOfExperience());
-        if (request.getPreviousSchool() != null) existing.setPreviousSchool(request.getPreviousSchool());
-        if (request.getAadharPhotourl() != null) existing.setAadharPhotourl(request.getAadharPhotourl());
-        if (request.getPanPhotourl() != null) existing.setPanPhotourl(request.getPanPhotourl());
-        if (request.getDegreeCertificateurl() != null) existing.setDegreeCertificateurl(request.getDegreeCertificateurl());
-        if (request.getResignationLetterurl() != null) existing.setResignationLetterurl(request.getResignationLetterurl());
-        if (request.getResumeurl() != null) existing.setResumeurl(request.getResumeurl());
 
-        if (request.getPassword() != null && !request.getPassword().isBlank()) {
-            existing.setPassword(passwordEncoder.encode(request.getPassword()));
-        }
+        teacherMapper.updateEntity(request, existing);
 
-        if (request.getSubjectId() != null) {
-            Subject subject = subjectRepository.findById(request.getSubjectId())
-                    .orElseThrow(() -> new RuntimeException("Subject not found"));
-            existing.setSubject(subject);
-        }
-
-        if (request.getSpecializationId() != null) {
-            Subject specialization = subjectRepository.findById(request.getSpecializationId())
-                    .orElseThrow(() -> new RuntimeException("Specialization not found"));
-            existing.setSpecialization(specialization);
-        }
-
-        return toDto(teacherRepo.save(existing));
+        return teacherMapper.toResponseDto(teacherRepo.save(existing));
     }
+
 
     @Override
     public void deleteTeacher(Long id) {
