@@ -6,6 +6,7 @@ import com.example.school_management.enums.Priority;
 import lombok.Builder;
 import lombok.Data;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ public class ComplaintResponseDto {
     private ComplaintCategory category;
     private ComplaintStatus status;
     private Priority priority;
-    private String supportedMedia;
+    private List<String> supportedMedia;
     private String resolutionComment;
     private String resolvedBy;
     private Instant resolvedAt;

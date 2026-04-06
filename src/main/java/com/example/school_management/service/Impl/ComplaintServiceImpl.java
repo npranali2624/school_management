@@ -42,7 +42,8 @@ public class ComplaintServiceImpl implements ComplaintService {
                 : null;
 
         return complaintMapper.toResponseDto(
-                complaintRepository.save(complaintMapper.toEntity(request, student, teacher)));
+                complaintRepository.save(
+                        complaintMapper.toEntity(request, student, teacher)));
     }
 
     @Override
@@ -57,43 +58,58 @@ public class ComplaintServiceImpl implements ComplaintService {
 
     @Override
     public List<ComplaintResponseDto> getComplaintsByStudent(Long studentId) {
-        return complaintMapper.toResponseDtoList(complaintRepository.findByStudentId(studentId));
+        return complaintMapper.toResponseDtoList(
+                complaintRepository.findByStudentId(studentId));
     }
 
     @Override
     public List<ComplaintResponseDto> getComplaintsByTeacher(Long teacherId) {
-        return complaintMapper.toResponseDtoList(complaintRepository.findByTeacherId(teacherId));
+        return complaintMapper.toResponseDtoList(
+                complaintRepository.findByTeacherId(teacherId));
     }
 
     @Override
     public List<ComplaintResponseDto> getComplaintsByStatus(ComplaintStatus status) {
-        return complaintMapper.toResponseDtoList(complaintRepository.findByStatus(status));
+        return complaintMapper.toResponseDtoList(
+                complaintRepository.findByStatus(status));
     }
 
     @Override
     public List<ComplaintResponseDto> getComplaintsByPriority(Priority priority) {
-        return complaintMapper.toResponseDtoList(complaintRepository.findByPriority(priority));
+        return complaintMapper.toResponseDtoList(
+                complaintRepository.findByPriority(priority));
     }
 
     @Override
     public List<ComplaintResponseDto> getComplaintsByCategory(ComplaintCategory category) {
-        return complaintMapper.toResponseDtoList(complaintRepository.findByCategory(category));
+        return complaintMapper.toResponseDtoList(
+                complaintRepository.findByCategory(category));
     }
 
     @Override
-    public ComplaintResponseDto updateStatus(Long id, ComplaintStatus status) {
+    public ComplaintResponseDto updateStatus(Long id, ComplaintStatus nextStatus) {
         Complaint complaint = findComplaintById(id);
-        complaint.setStatus(status);
+
+
+        complaint.getStatus().validateTransitionTo(nextStatus, complaint);
+
+        complaint.setStatus(nextStatus);
         return complaintMapper.toResponseDto(complaintRepository.save(complaint));
     }
 
     @Override
     public ComplaintResponseDto resolveComplaint(Long id, String resolutionComment, String resolvedBy) {
         Complaint complaint = findComplaintById(id);
-        complaint.setStatus(ComplaintStatus.RESOLVED);
+
+
         complaint.setResolutionComment(resolutionComment);
         complaint.setResolvedBy(resolvedBy);
         complaint.setResolvedAt(Instant.now());
+
+
+        complaint.getStatus().validateTransitionTo(ComplaintStatus.RESOLVED, complaint);
+
+        complaint.setStatus(ComplaintStatus.RESOLVED);
         return complaintMapper.toResponseDto(complaintRepository.save(complaint));
     }
 

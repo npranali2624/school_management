@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ComplaintRequestDto {
 
@@ -25,7 +27,7 @@ public class ComplaintRequestDto {
     private Priority priority;
 
     @Size(max = 500, message = ValidationMessages.COMPLAINT_MEDIA_MAX)
-    private String supportedMedia;
+    private List<String> supportedMedia;
 
     private Long studentId;
     private Long teacherId;

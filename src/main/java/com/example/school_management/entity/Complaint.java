@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "complaints")
@@ -37,8 +38,10 @@ public class Complaint extends BaseEntity {
     @Builder.Default
     private Priority priority = Priority.MEDIUM;
 
-    @Column(name = "supported_media", length = 500)
-    private String supportedMedia;
+    @ElementCollection
+    @CollectionTable(name = "complaint_media", joinColumns = @JoinColumn(name = "complaint_id"))
+    @Column(name = "media_url", length = 500)
+    private List<String> supportedMedia;
 
     @Column(name = "resolution_comment", length = 1000)
     private String resolutionComment;
