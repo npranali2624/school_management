@@ -20,9 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private ParentRepository parentRepository;
     @Autowired
-    private AdminRepository adminRepository; // ← ADDED
+    private AdminRepository adminRepository;
+
+
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+
 
         var adminOpt = adminRepository.findByUsername(identifier);
         if (adminOpt.isPresent()) {
@@ -30,16 +33,20 @@ public class CustomUserDetailsService implements UserDetailsService {
             return buildUser(admin.getUsername(), admin.getPassword(), "ADMIN");
         }
 
-        var empOpt = employeeRepository.findByEmail(identifier);
+
+        var empOpt = employeeRepository.findByEmail(identifier)
+                .or(() -> employeeRepository.findByMobile(identifier));
         if (empOpt.isPresent()) {
             Employee emp = empOpt.get();
-            return buildUser(emp.getEmail(), emp.getPassword(), emp.getRole().name());
+            return buildUser(identifier, emp.getPassword(), emp.getRole().name());
         }
 
-        var parentOpt = parentRepository.findByEmail(identifier);
+
+        var parentOpt = parentRepository.findByEmail(identifier)
+                .or(() -> parentRepository.findByMobilePrimary(identifier));
         if (parentOpt.isPresent()) {
             Parent parent = parentOpt.get();
-            return buildUser(parent.getEmail(), parent.getPassword(), "PARENT");
+            return buildUser(identifier, parent.getPassword(), "PARENT");
         }
 
         throw new UsernameNotFoundException("No user found: " + identifier);
@@ -49,7 +56,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new User(
                 identifier,
                 password,
-                List.of(new SimpleGrantedAuthority( "ROLE_" +role))
+                List.of(new SimpleGrantedAuthority("ROLE_" + role))
         );
     }
 }

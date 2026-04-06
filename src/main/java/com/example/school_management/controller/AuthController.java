@@ -48,7 +48,6 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .orElse("UNKNOWN");
 
-        //  REMOVE ROLE_ prefix
         role = role.replace("ROLE_", "");
 
         String token = jwtUtil.generateToken(request.getIdentifier(), role);
