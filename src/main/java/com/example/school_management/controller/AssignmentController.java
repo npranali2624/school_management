@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class AssignmentController {
     private final AssignmentService assignmentService;
 
     @PostMapping
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> createAssignment(
             @Valid @RequestBody AssignmentRequestDto requestDto) {
 
@@ -51,6 +53,7 @@ public class AssignmentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> updateAssignment(
             @PathVariable Long id,
             @Valid @RequestBody AssignmentRequestDto requestDto) {
@@ -63,6 +66,7 @@ public class AssignmentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<ApiResponse<String>> deleteAssignment(@PathVariable Long id) {
 
         assignmentService.deleteAssignment(id);
@@ -73,6 +77,7 @@ public class AssignmentController {
     }
 
     @PatchMapping("/{id}/publish")
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> publishAssignment(
             @PathVariable Long id) {
 
@@ -84,6 +89,7 @@ public class AssignmentController {
     }
 
     @PatchMapping("/{id}/cancel")
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<ApiResponse<AssignmentResponseDto>> cancelAssignment(
             @PathVariable Long id) {
 
